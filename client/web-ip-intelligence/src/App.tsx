@@ -18,42 +18,48 @@ interface IPInfo {
 
 
 const App = () => {
+  
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ipInfos, setIpInfos] = useState<IPInfo[]>([]);
-const handleClick = async () => {
-  const value = textareaRef.current?.value;
-  const extracted = extractIPs(value ?? "");
+  const handleClick = async () => {
+    const value = textareaRef.current?.value;
+    const extracted = extractIPs(value ?? "");
 
-  setIpInfos([]); // clear
+    setIpInfos([]); // clear
 
-  extracted.forEach(async (ip) => {
-    try {
-      const data = await fetchIPDetails(ip);
+    extracted.forEach(async (ip) => {
+      try {
+        const data = await fetchIPDetails(ip);
 
-      // Append result directly
-      setIpInfos(prev => [...prev, data]);
-      console.log("IP Details:", data);
-    } catch (error) {
-      console.error("Fehler bei IP:", ip);
-    }
-  });
-};
-
-
-
-const extractIPs = (text: string): string[] => {
-  const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/g;
-  const matches = text.match(ipRegex) || [];
-
-  // Entferne Duplikate mit Set
-  const uniqueIPs = Array.from(new Set(matches));
-
-  return uniqueIPs;
-};
+        // Append result directly
+        setIpInfos(prev => [...prev, data]);
+        console.log("IP Details:", data);
+      } catch (error) {
+        console.error("Fehler bei IP:", ip);
+      }
+    });
+  };
 
 
+
+  const extractIPs = (text: string): string[] => {
+    const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/g;
+    const matches = text.match(ipRegex) || [];
+
+    // Entferne Duplikate mit Set
+    const uniqueIPs = Array.from(new Set(matches));
+
+    return uniqueIPs;
+  };
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
-    const response = await axios.get(`http://localhost:3000/api/${ip}/`);
+
+
+
+
+    const response = await axios.get(`${apiUrl}/api/${ip}/`);
+
     const data = response.data;
 
     return {
