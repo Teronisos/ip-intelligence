@@ -3,14 +3,14 @@ services:
   server:
     build: ./server
     ports:
-      - "5000:5000"
+      - "3000:3000"
     restart: unless-stopped
 
   client:
     build:
       context: ./client/web-ip-intelligence
     ports:
-      - "3000:80"
+      - "4000:80"
     depends_on:
       - server
     restart: unless-stopped

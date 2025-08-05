@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 3000
 
 # Starte die App mit app.js
 CMD ["node", "app.js"]

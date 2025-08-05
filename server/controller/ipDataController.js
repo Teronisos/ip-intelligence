@@ -6,7 +6,8 @@ const Message = require('../services/messageObj').Message;
 
 
 exports.handleData = async (req, res) => {
-    const ip = req.params.ip;
+    const ip = req.query.q;
+    
 
     var ipRequestData = new Message(ip)
 
