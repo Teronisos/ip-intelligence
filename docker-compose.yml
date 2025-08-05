@@ -5,19 +5,12 @@ services:
     build: ./server
     ports:
       - "3000:3000"
-    env_file:
-      - ./server/.env.server
     restart: unless-stopped
-
   client:
     build:
       context: ./client/web-ip-intelligence
-      args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL}
     ports:
       - "4000:80"
-    env_file:
-      - ./client/web-ip-intelligence/.env.client
     restart: unless-stopped
     depends_on:
       - server
