@@ -53,12 +53,8 @@ const App = () => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  console.log(apiUrl)
   const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
-
-
-
-
 
     const response = await axios.get(`${apiUrl}/api/ip`, {
       params: { q: ip }

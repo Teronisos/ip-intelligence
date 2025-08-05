@@ -44,7 +44,7 @@ exports.handleData = async (req, res) => {
             res.json(ipRequestData);
         })
         .catch((error) => {
-            console.error('Error fetching abuse data:', error);
+            //console.error('Error fetching abuse data:', error);
             ipRequestData.message = "Error fetching abuse data";
             res.status(500).json(ipRequestData);
         }
