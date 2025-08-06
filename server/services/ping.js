@@ -4,12 +4,21 @@ const execAsync = util.promisify(exec);
 
 exports.pingIP = async (ip) => {
     try {
-        // fping -c 1 : exakt 1 ICMP Echo Request
-        // -t 250    : Timeout in Millisekunden (analog zu deinem Wunsch)
-        const { stdout } = await execAsync(`fping -c 1 -t 450 ${ip}`);
-        return true;
+        const { stdout } = await execAsync(`fping -r 0 -t 200 ${ip}`);
+        // Optional: weitere Auswertung von stdout
+        console.log("ping: ", stdout)
+        if (stdout.includes('is alive')) {
+            return true;
+        }
+        return false;
     } catch (error) {
-        //console.error('Ping failed:', error.message);
+        // fping gibt bei unreachable einen Fehler aus (Exit-Code != 0)
+        if (error.stdout && error.stdout.includes('is unreachable')) {
+            return false;
+        }
+
+        // andere Fehler (z. B. ungültige IP)
+        console.error('Fehler bei fping:', error.message);
         return false;
     }
 };

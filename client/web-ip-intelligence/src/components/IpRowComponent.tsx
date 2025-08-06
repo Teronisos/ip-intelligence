@@ -14,7 +14,7 @@ const IpRow = ({
 }) => {
     const pingValue = ping.toLowerCase();
     let pingClass = styles.pingSuccess;
-    if (pingValue.includes("offline")) {
+    if (pingValue.includes("unknown")) {
         pingClass = styles.pingDanger;
     }
     if (pingValue.includes("tcp")) {

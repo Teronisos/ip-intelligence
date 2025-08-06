@@ -2,6 +2,12 @@ FROM node:18
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y \
+    fping \
+    tcping \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 RUN npm install
 
@@ -9,5 +15,4 @@ COPY . .
 
 EXPOSE 3000
 
-# Starte die App mit app.js
 CMD ["node", "app.js"]
