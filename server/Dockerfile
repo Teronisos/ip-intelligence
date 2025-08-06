@@ -5,7 +5,6 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y \
     fping \
-    tcping \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
