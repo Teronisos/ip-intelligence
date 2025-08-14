@@ -1,4 +1,4 @@
-[![[![Docker Compose CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml)
+[![Docker Compose CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml)
 
 # IP Intelligence
 
