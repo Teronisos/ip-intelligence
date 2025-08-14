@@ -1,4 +1,4 @@
-[![Docker Image CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml/badge.svg?event=deployment)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml)
 
 # IP Intelligence
 
