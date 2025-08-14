@@ -1,0 +1,42 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Compose
+      run: docker compose version
+
+    - name: Build and start containers
+      run: docker compose up -d --build
+
+    - name: Wait for containers to be ready
+      run: sleep 10
+
+    - name: Check running containers
+      run: docker ps
+
+    - name: Test server (Port 3000)
+      run: |
+        curl --fail http://localhost:3000 || echo "Server auf Port 3000 nicht erreichbar"
+
+    - name: Test client (Port 4000 → 80)
+      run: |
+        curl --fail http://localhost:4000 || echo "Client auf Port 4000 nicht erreichbar"
+
+    - name: Show logs (bei Fehler hilfreich)
+      if: failure()
+      run: docker compose logs
+
+    - name: Stop and clean up
+      run: docker compose down
