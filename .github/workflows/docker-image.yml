@@ -1,0 +1,50 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build Server Docker image
+      run: |
+        docker build ./server -f ./server/Dockerfile -t server-image:latest
+
+    - name: Build Web Intelligence Client Docker image
+      run: |
+        docker build ./client/web-ip-intelligence -f ./client/web-ip-intelligence/Dockerfile -t client-image:latest
+
+    - name: Run Server Container on port 4000
+      run: |
+        docker run -d --name server-test -p 4000:4000 server-image:latest
+        sleep 10  # Warte, bis der Server läuft
+
+    - name: Run Client Container on port 3000
+      run: |
+        docker run -d --name client-test -p 3000:3000 client-image:latest
+        sleep 10  # Warte, bis der Client läuft
+
+    - name: Check if containers are running
+      run: |
+        echo "Laufende Container prüfen..."
+        docker ps
+        echo "Server läuft: $(docker inspect --format='{{.State.Running}}' server-test)"
+        echo "Client läuft: $(docker inspect --format='{{.State.Running}}' client-test)"
+
+    - name: Health Check via curl (wenn APIs erreichbar sind)
+      run: |
+        curl --fail http://localhost:4000 || echo "Server nicht erreichbar auf Port 4000"
+        curl --fail http://localhost:3000 || echo "Client nicht erreichbar auf Port 3000"
+
+    - name: Clean up containers
+      run: |
+        docker stop server-test client-test
+        docker rm server-test client-test
