@@ -1,3 +1,5 @@
+[![Docker Image CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml/badge.svg?event=deployment)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml)
+
 # IP Intelligence
 
 Extract IPv4 addresses from logs, perform lookups, and check if they are reachable.  
