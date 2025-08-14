@@ -83,3 +83,25 @@
     flex: 1;
     min-width: 0;
   }
+
+.footer {
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+
+  }
+
+  .footer a {
+    color: #4dd0e1;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .footer a:hover {
+    color: #80deea;
+    text-shadow: 0 0 8px rgba(128, 222, 234, 0.8);
+  }
+

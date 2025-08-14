@@ -4,6 +4,7 @@ import ExtractIPsButton from "./components/ExtractIPsButton";
 import React, { useRef, useState } from "react";
 import axios from "axios";
 
+
 interface IPInfo {
   ip: string;
   hostname: string;    // <- aus: domain
@@ -104,7 +105,14 @@ const App = () => {
           </ul>
         </div>
       </div>
-
+      <footer className="footer">
+        <p>
+        🚀 Get Code on&nbsp;
+          <a href="https://github.com/Teronisos/ip-intelligence" target="_blank">
+            GitHub
+          </a>
+        </p>
+      </footer>
     </>
   );
 };
