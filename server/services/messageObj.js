@@ -7,7 +7,7 @@ class Message {
     city;
     pingStatus;
     abuse;
-    tcpPingStatus
+    commonPorts
     message;
 
     constructor(ip) {

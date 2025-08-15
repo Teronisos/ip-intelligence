@@ -1,13 +1,13 @@
 const getAbuseData = require('../services/abusedbService').getAbuseData;
 const ping = require('../services/ping').pingIP;
-const tcping = require('../services/tcping').tcping;
+const checkCommonPorts = require('../services/checkPorts').checkCommonPorts;
 const checkIP = require('../services/validation');
 const Message = require('../services/messageObj').Message;
 
 
 exports.handleData = async (req, res) => {
     const ip = req.query.q;
-    
+
 
     var ipRequestData = new Message(ip)
 
@@ -21,15 +21,10 @@ exports.handleData = async (req, res) => {
     if (!checkIP.checkIfIPisPrivate(ip)) {
         const pingResult = await ping(ip);
         ipRequestData.pingStatus = pingResult;
+        ipRequestData.commonPorts = await checkCommonPorts(ip);
     } else {
         ipRequestData.pingStatus = false;
         ipRequestData.message = "Private IP addresses cannot be pinged";
-    }
-
-    try {
-        ipRequestData.tcpPingStatus = await tcping(ip);
-    } catch {
-        ipRequestData.tcpPingStatus = false;
     }
 
 
