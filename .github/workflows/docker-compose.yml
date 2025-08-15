@@ -28,7 +28,7 @@ jobs:
 
     - name: Test server (Port 3000)
       run: |
-        curl --fail http://localhost:3000 || echo "Server auf Port 3000 nicht erreichbar"
+        curl --fail http://localhost:3000/check || echo "Server auf Port 3000 nicht erreichbar"
 
     - name: Test client (Port 4000 → 80)
       run: |
