@@ -12,11 +12,8 @@ app.use(cors({
 
 app.use(express.json());
 
-// for workflow action check
-app.use('/', (req, res) => {
-  res.send(`server is running on port ${PORT}`)
-})
 
+app.use('/check', require('./routes/check'));
 app.use('/api', require('./routes/ipDataRequest'));
 
 const PORT = 3000;
