@@ -1,25 +1,36 @@
 import styles from './IpRowComponent.module.css';
 
-const IpRow = ({
-    ip = "",
-    hostname = "",
-    flag = "",
-    location = "",
-    asn = "",
-    org = "",
-    abuse = "",
-    abuseColor = "", // eigener Modul-Klassenname
-    ping = "",
-    pingColor = ""
+
+export type CommonPort = {
+    port: number;
+    open: boolean;
+};
+
+interface IpRowProps {
+    ip: string;
+    hostname: string;
+    flag: string;
+    location: string;
+    org: string;
+    abuse: string;
+    ping: string | boolean;
+    abuseColor?: string;
+    pingColor?: string;
+    commonPorts?: CommonPort[]; // <-- Typ korrekt setzen
+}
+
+const IpRow: React.FC<IpRowProps> = ({
+    ip,
+    hostname,
+    flag,
+    location,
+    org,
+    abuse,
+    ping,
+    commonPorts = [],
 }) => {
-    const pingValue = ping.toLowerCase();
-    let pingClass = styles.pingSuccess;
-    if (pingValue.includes("unknown")) {
-        pingClass = styles.pingDanger;
-    }
-    if (pingValue.includes("tcp")) {
-        pingClass = styles.pingTcp;
-    }
+    const pingClass = ping === "true" || ping === true ? styles.pingSuccess : styles.pingDanger;
+    const pingText = "ping"
 
     const abuseValue = parseInt(abuse.match(/\d+/)?.[0] || "0", 10);
     let abuseClass = styles.abuseSuccess;
@@ -39,6 +50,9 @@ const IpRow = ({
         ? "?"
         : countryCodeToEmoji(flag);
 
+
+
+
     return (
         <li className={styles.ipItem}>
             {/* IP + Hostname */}
@@ -50,14 +64,34 @@ const IpRow = ({
             {/* Mitte */}
             <div className={styles.ipMid}>
                 <span className={styles.flag}>{flagSymbol}</span>
-                &nbsp; | <span>{location}</span> | <span>{org}</span> | <span>{asn}</span>
+                &nbsp; | <span>{location}</span> | <span>{org}</span>
             </div>
 
             {/* Status */}
             <div className={styles.ipRight}>
+                {/* Abuse */}
                 <span className={`${styles.statusTag} ${abuseClass}`}>{abuse}</span>
-                <span className={`${styles.statusTag} ${pingClass}`}>{ping}</span>
+
+                {/* Ping */}
+                <span className={`${styles.statusTag} ${ping ? styles.pingSuccess : styles.pingDanger}`}>
+                    {pingText}
+                </span>
+
+                {/* Common Ports */}
+                <span>
+                    {commonPorts && commonPorts.length > 0
+                        ? commonPorts.map((p) => (
+                            <span
+                                key={p.port}
+                                className={`${styles.portOpen} ${!p.open ? styles.portClosed : ""}`}
+                            >
+                                {p.port} {p.open ? "✓" : "✗"}
+                            </span>
+                        ))
+                        : <span className={styles.statusTag}>—</span>}
+                </span>
             </div>
+
         </li>
     );
 };

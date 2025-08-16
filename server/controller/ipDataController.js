@@ -55,7 +55,7 @@ const abusedDBData = async (msgObj) => {
         msgObj.domain = abuseData.data["domain"];
         msgObj.abuse = abuseData.data["abuseConfidenceScore"];
         msgObj.isPublic = abuseData.data["isPublic"];
-        msgObj.ips = abuseData.data["isp"];
+        msgObj.isp = abuseData.data["isp"];
 
         return msgObj;
     } catch (error) {

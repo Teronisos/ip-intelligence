@@ -4,17 +4,22 @@ import ExtractIPsButton from "./components/ExtractIPsButton";
 import React, { useRef, useState } from "react";
 import axios from "axios";
 
+type CommonPort = {
+  port: number;
+  open: boolean;
+};
 
 interface IPInfo {
   ip: string;
-  hostname: string;    // <- aus: domain
-  flag: string;        // <- aus: countryCode
-  location: string;    // <- leer lassen oder countryCode + org kombinieren
-  asn: string;         // <- leer oder "N/A"
-  org: string;         // <- aus: ips
-  abuse: string;       // <- aus: abuse, z.B. "Abuse: 0%"
-  ping: string;        // <- aus: pingStatus / tcpPingStatus
+  hostname: string;
+  flag: string;
+  location: string;
+  org: string;
+  abuse: string;
+  ping: boolean;
+  commonPorts: CommonPort[];
 }
+
 
 
 
@@ -47,7 +52,7 @@ const App = () => {
     const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/g;
     const matches = text.match(ipRegex) || [];
 
-    // Entferne Duplikate mit Set
+
     const uniqueIPs = Array.from(new Set(matches));
 
     return uniqueIPs;
@@ -56,24 +61,29 @@ const App = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   console.log(apiUrl)
   const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
+  const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
+  const data = response.data;
 
-    const response = await axios.get(`${apiUrl}/api/ip`, {
-      params: { q: ip }
-    });
+  // commonPorts in Array umwandeln
+  const commonPortsArray: CommonPort[] = data.commonPorts
+    ? Object.entries(data.commonPorts).map(([port, isOpen]) => ({
+        port: parseInt(port.replace("port", ""), 10),
+        open: Boolean(isOpen),
+      }))
+    : [];
 
-    const data = response.data;
-
-    return {
-      ip: data.ip,
-      hostname: data.domain || "unknown",
-      flag: data.countryCode || "unknown",
-      location: `${data.countryCode || ""}`, // oder `${data.countryCode} - ${data.ips}`
-      asn: "N/A", // nicht vorhanden in deiner API
-      org: data.ips || "unknown",
-      abuse: `Abuse: ${data.abuse ?? 0}%`,
-      ping: data.pingStatus ? "ping" : (data.tcpPingStatus ? "online (TCP)" : "unknown"),
-    };
+  return {
+    ip: data.ip,
+    hostname: data.domain || "unknown",
+    flag: data.countryCode || "unknown",
+    location: `${data.countryCode || ""}`,
+    org: data.isp || "unknown",
+    abuse: `Abuse: ${data.abuse ?? 0}%`,
+    ping: data.pingStatus || false,
+    commonPorts: commonPortsArray,
   };
+};
+
 
   return (
     <>
@@ -96,10 +106,10 @@ const App = () => {
                 hostname={info.hostname}
                 flag={info.flag}
                 location={info.location}
-                asn={info.asn}
                 org={info.org}
                 abuse={info.abuse}
                 ping={info.ping}
+                commonPorts={info.commonPorts}
               />
             ))}
           </ul>
@@ -107,7 +117,7 @@ const App = () => {
       </div>
       <footer className="footer">
         <p>
-        🚀 Get Code on&nbsp;
+          🚀 Get Code on&nbsp;
           <a href="https://github.com/Teronisos/ip-intelligence" target="_blank">
             GitHub
           </a>
