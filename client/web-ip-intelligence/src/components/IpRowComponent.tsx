@@ -65,7 +65,7 @@ const IpRow: React.FC<IpRowProps> = ({
             {/* Mitte */}
             <div className={styles.ipMid}>
                 <span className={styles.flag}>
-                    <Flag code={flagSymbol} style={{ width: 32 }} />
+                    <Flag code={flagSymbol}/>
                 </span>
                 <span className={styles.trenner}>•</span>  {/* Trenner */}
                 <span>{location}</span>
