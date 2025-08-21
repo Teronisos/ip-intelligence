@@ -3,7 +3,6 @@ const net = require('net');
 // generischer Port-Check
 function checkPort(ip, port, timeout = 250) {
     return new Promise((resolve) => {
-        console.log(ip)
         const socket = new net.Socket();
         let isOpen = false;
 

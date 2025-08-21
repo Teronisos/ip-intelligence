@@ -3,6 +3,7 @@ const ping = require('../services/ping').pingIP;
 const checkCommonPorts = require('../services/checkPorts').checkCommonPorts;
 const checkIP = require('../services/validation');
 const Message = require('../services/messageObj').Message;
+const isIpBlocked = require('../services/blocklistRequest').isIpBlocked
 
 
 exports.handleData = async (req, res) => {
@@ -16,7 +17,12 @@ exports.handleData = async (req, res) => {
         return res.json(ipRequestData);
     }
 
-
+    if (await checkBlockList(ip)) {
+        ipRequestData.inBlocklist = true
+      
+    } else {
+        ipRequestData.inBlocklist = false
+    }
 
     if (!checkIP.checkIfIPisPrivate(ip)) {
         const pingResult = await ping(ip);
@@ -62,6 +68,10 @@ const abusedDBData = async (msgObj) => {
         console.error('Error fetching abuse data:', error);
         throw error;
     }
+}
+
+const checkBlockList = async (ip) => {
+    return await isIpBlocked(ip);
 }
 
 

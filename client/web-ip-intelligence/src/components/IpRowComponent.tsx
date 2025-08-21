@@ -1,5 +1,5 @@
 import styles from './IpRowComponent.module.css';
-
+import Flag from 'react-world-flags';
 
 export type CommonPort = {
     port: number;
@@ -17,6 +17,7 @@ interface IpRowProps {
     abuseColor?: string;
     pingColor?: string;
     commonPorts?: CommonPort[]; // <-- Typ korrekt setzen
+    inBlocklist: boolean;
 }
 
 const IpRow: React.FC<IpRowProps> = ({
@@ -28,6 +29,7 @@ const IpRow: React.FC<IpRowProps> = ({
     abuse,
     ping,
     commonPorts = [],
+    inBlocklist
 }) => {
     const pingClass = ping === "true" || ping === true ? styles.pingSuccess : styles.pingDanger;
     const pingText = "ping"
@@ -46,14 +48,13 @@ const IpRow: React.FC<IpRowProps> = ({
             abuseClass = styles.abuseSuccess;
     }
 
-    const flagSymbol = flag.toLowerCase() === "unknown" || !flag
-        ? "?"
-        : countryCodeToEmoji(flag);
+    const flagSymbol = flag.toLowerCase()
 
 
-
+    console.log(inBlocklist)
 
     return (
+
         <li className={styles.ipItem}>
             {/* IP + Hostname */}
             <div className={styles.ipLeft}>
@@ -63,43 +64,51 @@ const IpRow: React.FC<IpRowProps> = ({
 
             {/* Mitte */}
             <div className={styles.ipMid}>
-                <span className={styles.flag}>{flagSymbol}</span>
-                &nbsp; | <span>{location}</span> | <span>{org}</span>
+                <span className={styles.flag}>
+                    <Flag code={flagSymbol} style={{ width: 32 }} />
+                </span>
+                <span className={styles.trenner}>•</span>  {/* Trenner */}
+                <span>{location}</span>
+                <span className={styles.trenner}>•</span>  {/* Trenner */}
+                <span>{org}</span>
             </div>
+
 
             {/* Status */}
             <div className={styles.ipRight}>
-                {/* Abuse */}
                 <span className={`${styles.statusTag} ${abuseClass}`}>{abuse}</span>
 
-                {/* Ping */}
                 <span className={`${styles.statusTag} ${ping ? styles.pingSuccess : styles.pingDanger}`}>
                     {pingText}
                 </span>
-
-                {/* Common Ports */}
-                <span>
+                {inBlocklist === true && (
+                    <span className={`${styles.statusTag} ${styles.blocked}`}>in blocklist</span>
+                )}
+                {inBlocklist === false && (
+                    <span className={`${styles.statusTag} ${styles.clean}`}>clean</span>
+                )}
+                {inBlocklist !== true && inBlocklist !== false && (
+                    <span className={`${styles.statusTag} ${styles.noInfo}`}>❔ No Info</span>
+                )}
+                <span className={styles.statusTag}>
                     {commonPorts && commonPorts.length > 0
                         ? commonPorts.map((p) => (
                             <span
                                 key={p.port}
                                 className={`${styles.portOpen} ${!p.open ? styles.portClosed : ""}`}
                             >
-                                {p.port} {p.open ? "✓" : "✗"}
+                                {p.port}
                             </span>
                         ))
-                        : <span className={styles.statusTag}>—</span>}
+                        : "—"}
                 </span>
+
+
             </div>
 
         </li>
     );
 };
 
-function countryCodeToEmoji(code: string) {
-    return code
-        .toUpperCase()
-        .replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt(0)));
-}
 
 export default IpRow;

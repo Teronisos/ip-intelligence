@@ -16,8 +16,9 @@ interface IPInfo {
   location: string;
   org: string;
   abuse: string;
-  ping: boolean;
+  ping: string | boolean;
   commonPorts: CommonPort[];
+  inBlocklist: boolean;
 }
 
 
@@ -72,6 +73,8 @@ const App = () => {
       }))
     : [];
 
+    
+
   return {
     ip: data.ip,
     hostname: data.domain || "unknown",
@@ -81,6 +84,7 @@ const App = () => {
     abuse: `Abuse: ${data.abuse ?? 0}%`,
     ping: data.pingStatus || false,
     commonPorts: commonPortsArray,
+    inBlocklist: data.inBlocklist !== undefined ? data.inBlocklist : "no info"
   };
 };
 
@@ -110,6 +114,7 @@ const App = () => {
                 abuse={info.abuse}
                 ping={info.ping}
                 commonPorts={info.commonPorts}
+                inBlocklist={info.inBlocklist}
               />
             ))}
           </ul>

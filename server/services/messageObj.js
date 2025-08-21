@@ -9,7 +9,7 @@ class Message {
     abuse;
     commonPorts
     message;
-
+    inBlocklist;
     constructor(ip) {
         this.ip = ip;
     }
