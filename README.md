@@ -5,6 +5,8 @@
 Extract IPv4 addresses from logs, perform lookups, and check if they are reachable.  
 Lookup information is provided by [abuseipdb.com](https://www.abuseipdb.com/).
 
+Try the live demo  [here](https://ip-scan.braitinger.org).
+
 ![Screenshot](screen.png)
 
 ---
@@ -22,7 +24,6 @@ REACT_APP_API_URL=NODE_SERVER_ENDPOINT (most of the time the ip of your server)
 
 Create the `.env.server` file in `/server/`:<br>
 token=YOUR_ABUSEDBIP_TOKEN
-
 
 ---
 
