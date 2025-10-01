@@ -65,7 +65,7 @@ const App = () => {
   const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
   const data = response.data;
 
-  // commonPorts in Array umwandeln
+  
   const commonPortsArray: CommonPort[] = data.commonPorts
     ? Object.entries(data.commonPorts).map(([port, isOpen]) => ({
         port: parseInt(port.replace("port", ""), 10),

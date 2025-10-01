@@ -16,7 +16,7 @@ interface IpRowProps {
     ping: string | boolean;
     abuseColor?: string;
     pingColor?: string;
-    commonPorts?: CommonPort[]; // <-- Typ korrekt setzen
+    commonPorts?: CommonPort[]; 
     inBlocklist: boolean;
 }
 
@@ -62,14 +62,14 @@ const IpRow: React.FC<IpRowProps> = ({
                 <small className={styles.hostname}>{hostname}</small>
             </div>
 
-            {/* Mitte */}
+            {/* Middle */}
             <div className={styles.ipMid}>
                 <span className={styles.flag}>
                     <Flag code={flagSymbol}/>
                 </span>
-                <span className={styles.trenner}>•</span>  {/* Trenner */}
+                <span className={styles.trenner}>•</span>  
                 <span>{location}</span>
-                <span className={styles.trenner}>•</span>  {/* Trenner */}
+                <span className={styles.trenner}>•</span>  
                 <span>{org}</span>
             </div>
 

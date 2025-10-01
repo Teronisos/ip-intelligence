@@ -1,6 +1,6 @@
 const net = require('net');
 
-// generischer Port-Check
+
 function checkPort(ip, port, timeout = 250) {
     return new Promise((resolve) => {
         const socket = new net.Socket();

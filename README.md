@@ -5,7 +5,7 @@
 Extract IPv4 addresses from logs, perform lookups, and check if they are reachable.  
 Lookup information is provided by [abuseipdb.com](https://www.abuseipdb.com/).
 
-Try the live demo  [here](https://ip-scan.braitinger.org).
+Try the live demo  [here](https://ip-scan.teronisos.tech).
 
 ![Screenshot](screen.png)
 

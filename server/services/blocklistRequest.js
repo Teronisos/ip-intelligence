@@ -1,16 +1,16 @@
-const fetch = global.fetch; // Node 18+ (sonst: node-fetch installieren)
+const fetch = global.fetch; 
 
 let ipSet = null;
 
-// Lädt die Blocklist einmal und cached sie
+
 async function loadBlocklist() {
-    if (ipSet) return ipSet; // Cache nutzen
+    if (ipSet) return ipSet; 
     console.log("fetche Blocklist neu")
     const url = "https://lists.blocklist.de/lists/all.txt";
     const res = await fetch(url);
     const text = await res.text();
 
-    // Set mit IP-Strings erstellen
+  
     ipSet = new Set(
         text
             .split("\n")
@@ -21,7 +21,7 @@ async function loadBlocklist() {
     return ipSet;
 }
 
-// Prüft, ob eine IP in der Blocklist ist
+
 exports.isIpBlocked = async function(ip) {
     console.log(ip)
     if (!ip) {
@@ -31,10 +31,10 @@ exports.isIpBlocked = async function(ip) {
 
     const set = await loadBlocklist();
 
-    ip = String(ip).trim(); // in String umwandeln und trimmen
+    ip = String(ip).trim(); 
 
    
-    const result = set.has(ip); // prüft die tatsächliche IP
+    const result = set.has(ip);
     console.log(result)
   
     return result;
