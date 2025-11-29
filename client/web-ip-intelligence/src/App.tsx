@@ -21,8 +21,35 @@ interface IPInfo {
   inBlocklist: boolean;
 }
 
+type DnsAnswer = {
+  name: string;
+  type: number;
+  TTL: number;
+  data: string;
+};
 
 
+
+const resolveDomain = async (domain: string): Promise<string[]> => {
+  try {
+    console.log(domain)
+    const res = await fetch(
+      `https://dns.google/resolve?name=${domain}&type=A`
+    );
+    const data = await res.json();
+
+    const answers: DnsAnswer[] = data.Answer || [];
+
+    const ips = answers
+      .filter((a) => a.type === 1) // 1 = A-Record (IPv4)
+      .map((a) => a.data);
+
+    return ips;
+  } catch (e) {
+    console.error("DNS lookup failed for:", domain);
+    return [];
+  }
+};
 
 const App = () => {
 
@@ -32,61 +59,85 @@ const App = () => {
     const value = textareaRef.current?.value;
     const extracted = extractIPs(value ?? "");
 
-    setIpInfos([]); // clear
+    setIpInfos([]);
 
-    extracted.forEach(async (ip) => {
-      try {
-        const data = await fetchIPDetails(ip);
+    for (const item of extracted) {
+      let ips: string[] = [];
 
-        // Append result directly
-        setIpInfos(prev => [...prev, data]);
 
-      } catch (error) {
-        console.error("Fehler bei IP:", ip);
+      const isIPv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(item);
+
+      if (isIPv4) {
+
+        ips = [item];
+      } else {
+
+        ips = await resolveDomain(item);
+        console.log(ips)
+        if (ips.length === 0) {
+          console.error(`Domain konnte nicht aufgelöst werden: ${item}`);
+          continue;
+        }
       }
-    });
+
+
+      for (const ip of ips) {
+        try {
+          console.log(ip)
+          const data = await fetchIPDetails(ip);
+
+          setIpInfos(prev => [...prev, data]);
+
+        } catch (error) {
+          console.error("Fehler bei IP:", ip, error);
+        }
+      }
+    }
   };
+
 
 
 
   const extractIPs = (text: string): string[] => {
     const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/g;
-    const matches = text.match(ipRegex) || [];
+    const domainRegex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})\b/g; // incl. subdomains
 
 
-    const uniqueIPs = Array.from(new Set(matches));
+    const ips = text.match(ipRegex) || [];
+    const domains = text.match(domainRegex) || [];
 
-    return uniqueIPs;
+    return Array.from(new Set([...ips, ...domains]));
   };
+
 
   const apiUrl = process.env.REACT_APP_API_URL;
   console.log(apiUrl)
   const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
-  const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
-  const data = response.data;
+    const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
+    const data = response.data;
 
-  
-  const commonPortsArray: CommonPort[] = data.commonPorts
-    ? Object.entries(data.commonPorts).map(([port, isOpen]) => ({
+
+    const commonPortsArray: CommonPort[] = data.commonPorts
+      ? Object.entries(data.commonPorts).map(([port, isOpen]) => ({
         port: parseInt(port.replace("port", ""), 10),
         open: Boolean(isOpen),
       }))
-    : [];
+      : [];
 
-    
 
-  return {
-    ip: data.ip,
-    hostname: data.domain || "unknown",
-    flag: data.countryCode || "unknown",
-    location: `${data.countryCode || ""}`,
-    org: data.isp || "unknown",
-    abuse: `Abuse: ${data.abuse ?? 0}%`,
-    ping: data.pingStatus || false,
-    commonPorts: commonPortsArray,
-    inBlocklist: data.inBlocklist !== undefined ? data.inBlocklist : "no info"
+
+    return {
+      ip: data.ip,
+      hostname: data.domain || "unknown",
+      flag: data.countryCode || "unknown",
+      location: `${data.countryCode || ""}`,
+      org: data.isp || "unknown",
+      abuse: `Abuse: ${data.abuse ?? 0}%`,
+      ping: data.pingStatus || false,
+      commonPorts: commonPortsArray,
+      inBlocklist: data.inBlocklist !== undefined ? data.inBlocklist : "no info"
+    };
   };
-};
 
 
   return (
