@@ -10,7 +10,10 @@ Try the live demo  [here](https://ip-scan.teronisos.tech).
 ![Screenshot](screen.png)
 
 ---
-
+## Download
+```bash
+git clone https://github.com/Teronisos/ip-intelligence.git
+```
 ## Set Environment Variables
 
 ### Client
