@@ -19,15 +19,27 @@
   }
 
   header {
-
     background-color: #21222c;
     padding: 1rem;
     border-bottom: 1px solid #44475a;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  header h1 {
+  .version {
+    font-family: 'Roboto Mono', monospace;
+    background: #282a36;
+    color: #50fa7b;
+  }
+
+  @media (max-width: 700px) {
+    .version {
+      display: none;
+    }
+  }
+
+  .rightHeader h1 {
     font-family: 'Inter', 'Segoe UI', sans-serif;
     font-weight: 700;
     font-size: 1.2rem;
@@ -41,7 +53,6 @@
 
   .highlight-box {
     background-color: #50fa7b1a;
-    /* leichtes Grün als tech Akzent */
     color: #50fa7b;
     padding: 0.3em 0.8em;
     border-radius: 0.5rem;
@@ -54,9 +65,9 @@
 
   .highlight-box:hover {
     background-color: #50fa7b33;
-    /* etwas dunkler beim Hover */
     box-shadow: inset 0 0 6px #50fa7b55;
   }
+
 
   .dashboard {
     flex: 1;
@@ -84,7 +95,7 @@
     min-width: 0;
   }
 
-.footer {
+  .footer {
     color: #fff;
     text-align: center;
     padding: 1rem 0;
@@ -104,4 +115,3 @@
     color: #80deea;
     text-shadow: 0 0 8px rgba(128, 222, 234, 0.8);
   }
-

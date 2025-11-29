@@ -32,7 +32,7 @@ type DnsAnswer = {
 
 const resolveDomain = async (domain: string): Promise<string[]> => {
   try {
-    console.log(domain)
+    //console.log(domain)
     const res = await fetch(
       `https://dns.google/resolve?name=${domain}&type=A`
     );
@@ -73,7 +73,7 @@ const App = () => {
       } else {
 
         ips = await resolveDomain(item);
-        console.log(ips)
+        //console.log(ips)
         if (ips.length === 0) {
           console.error(`Domain konnte nicht aufgelöst werden: ${item}`);
           continue;
@@ -83,7 +83,7 @@ const App = () => {
 
       for (const ip of ips) {
         try {
-          console.log(ip)
+          //console.log(ip)
           const data = await fetchIPDetails(ip);
 
           setIpInfos(prev => [...prev, data]);
@@ -111,7 +111,6 @@ const App = () => {
 
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  console.log(apiUrl)
   const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
     const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
     const data = response.data;
@@ -143,7 +142,10 @@ const App = () => {
   return (
     <>
       <header>
+        <span className="version">v2025-11</span>
+        <div className="rightHeader">
         <h1><span className="highlight-box">IP Intelligence</span> Dashboard</h1>
+        </div>
       </header>
 
       <div className="dashboard">

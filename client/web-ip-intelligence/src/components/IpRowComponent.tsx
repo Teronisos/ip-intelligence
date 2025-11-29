@@ -51,7 +51,7 @@ const IpRow: React.FC<IpRowProps> = ({
     const flagSymbol = flag.toLowerCase()
 
 
-    console.log(inBlocklist)
+
 
     return (
 
