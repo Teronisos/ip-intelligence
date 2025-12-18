@@ -99,14 +99,36 @@ const App = () => {
 
 
   const extractIPs = (text: string): string[] => {
-    const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/g;
-    const domainRegex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})\b/g; // incl. subdomains
+    const ipRegex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
+    const domainRegex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})\b/g;
 
-
-    const ips = text.match(ipRegex) || [];
-    const domains = text.match(domainRegex) || [];
+    const ips = (text.match(ipRegex) || []).filter(isPublicIPv4);
+    const domains = (text.match(domainRegex) || [])
+      .filter(d => d.toLowerCase() !== 'localhost');
 
     return Array.from(new Set([...ips, ...domains]));
+  };
+
+
+  const isPublicIPv4 = (ip: string): boolean => {
+    const parts = ip.split('.').map(Number);
+    if (parts.length !== 4 || parts.some(p => p < 0 || p > 255)) {
+      return false;
+    }
+
+    const [a, b, c, d] = parts;
+
+    return !(
+      a === 0 ||                          // 0.0.0.0/8
+      a === 10 ||                         // 10.0.0.0/8
+      a === 127 ||                        // Loopback
+      (a === 169 && b === 254) ||         // Link-local
+      (a === 172 && b >= 16 && b <= 31) ||// 172.16.0.0/12
+      (a === 192 && b === 168) ||         // 192.168.0.0/16
+      (a >= 224 && a <= 239) ||           // Multicast
+      (a >= 240) ||                       // Reserved
+      (a === 255 && b === 255 && c === 255 && d === 255)
+    );
   };
 
 
@@ -142,9 +164,9 @@ const App = () => {
   return (
     <>
       <header>
-        <span className="version">v2025-11</span>
+        <span className="version">v2025-12</span>
         <div className="rightHeader">
-        <h1><span className="highlight-box">IP Intelligence</span> Dashboard</h1>
+          <h1><span className="highlight-box">IP Intelligence</span> Dashboard</h1>
         </div>
       </header>
 
