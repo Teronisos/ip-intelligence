@@ -99,14 +99,49 @@ const App = () => {
 
 
   const extractIPs = (text: string): string[] => {
-    const ipRegex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
+    const ipv4Regex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
+    const ipv6Regex = /\b[a-fA-F0-9:]{2,}\b/g;
     const domainRegex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})\b/g;
 
-    const ips = (text.match(ipRegex) || []).filter(isPublicIPv4);
+    const ipv4s = (text.match(ipv4Regex) || []).filter(isPublicIPv4);
+    const ipv6s = (text.match(ipv6Regex) || []).filter(isPublicIPv6);
     const domains = (text.match(domainRegex) || [])
       .filter(d => d.toLowerCase() !== 'localhost');
 
-    return Array.from(new Set([...ips, ...domains]));
+    return Array.from(new Set([...ipv4s, ...ipv6s, ...domains]));
+  };
+
+  const isValidIPv6 = (ip: string): boolean => {
+    // nur ein "::" erlaubt
+    if (ip.split('::').length > 2) return false;
+
+    const parts = ip.includes('::')
+      ? ip.replace('::', ':'.repeat(9 - ip.split(':').length)).split(':')
+      : ip.split(':');
+
+    if (parts.length !== 8) return false;
+
+    return parts.every(p =>
+      p === '' || /^[a-fA-F0-9]{1,4}$/.test(p)
+    );
+  };
+
+
+
+
+  const isPublicIPv6 = (ip: string): boolean => {
+    if (!isValidIPv6(ip)) return false;
+
+    const n = ip.toLowerCase();
+
+    return !(
+      n === '::' ||                  // Unspecified
+      n === '::1' ||                 // Loopback
+      n.startsWith('fe80:') ||       // Link-local
+      n.startsWith('fc') ||          // ULA
+      n.startsWith('fd') ||          // ULA
+      n.startsWith('ff')             // Multicast
+    );
   };
 
 

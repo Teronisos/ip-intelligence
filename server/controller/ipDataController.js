@@ -19,19 +19,17 @@ exports.handleData = async (req, res) => {
 
     if (await checkBlockList(ip)) {
         ipRequestData.inBlocklist = true
-      
+
     } else {
         ipRequestData.inBlocklist = false
     }
 
-    if (!checkIP.checkIfIPisPrivate(ip)) {
-        const pingResult = await ping(ip);
-        ipRequestData.pingStatus = pingResult;
-        ipRequestData.commonPorts = await checkCommonPorts(ip);
-    } else {
-        ipRequestData.pingStatus = false;
-        ipRequestData.message = "Private IP addresses cannot be pinged";
-    }
+
+    const pingResult = await ping(ip);
+    console.log(    `Ping result for ${ip}: ${pingResult}`);
+    ipRequestData.pingStatus = pingResult;
+    ipRequestData.commonPorts = await checkCommonPorts(ip);
+
 
 
 

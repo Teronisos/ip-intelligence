@@ -16,7 +16,7 @@ interface IpRowProps {
     ping: string | boolean;
     abuseColor?: string;
     pingColor?: string;
-    commonPorts?: CommonPort[]; 
+    commonPorts?: CommonPort[];
     inBlocklist: boolean;
 }
 
@@ -65,11 +65,11 @@ const IpRow: React.FC<IpRowProps> = ({
             {/* Middle */}
             <div className={styles.ipMid}>
                 <span className={styles.flag}>
-                    <Flag code={flagSymbol}/>
+                    <Flag code={flagSymbol} />
                 </span>
-                <span className={styles.trenner}>•</span>  
+                <span className={styles.trenner}>•</span>
                 <span>{location}</span>
-                <span className={styles.trenner}>•</span>  
+                <span className={styles.trenner}>•</span>
                 <span>{org}</span>
             </div>
 
@@ -82,7 +82,13 @@ const IpRow: React.FC<IpRowProps> = ({
                     {pingText}
                 </span>
                 {inBlocklist === true && (
-                    <span className={`${styles.statusTag} ${styles.blocked}`}>in blocklist</span>
+                    <a
+                        href="https://lists.blocklist.de/lists/all.txt"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <span className={`${styles.statusTag} ${styles.blocked}`}>in blocklist</span>
+                    </a>
                 )}
                 {inBlocklist === false && (
                     <span className={`${styles.statusTag} ${styles.clean}`}>clean</span>
@@ -90,6 +96,7 @@ const IpRow: React.FC<IpRowProps> = ({
                 {inBlocklist !== true && inBlocklist !== false && (
                     <span className={`${styles.statusTag} ${styles.noInfo}`}>❔ No Info</span>
                 )}
+
                 <span className={styles.statusTag}>
                     {commonPorts && commonPorts.length > 0
                         ? commonPorts.map((p) => (
