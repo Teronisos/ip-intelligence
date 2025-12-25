@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import styles from './IpRowComponent.module.css';
 import Flag from 'react-world-flags';
+import Modal from './Modal';
 
 export type CommonPort = {
     port: number;
@@ -19,6 +21,7 @@ interface IpRowProps {
     commonPorts?: CommonPort[];
     inBlocklist: boolean;
 }
+
 
 const IpRow: React.FC<IpRowProps> = ({
     ip,
@@ -50,6 +53,13 @@ const IpRow: React.FC<IpRowProps> = ({
 
     const flagSymbol = flag.toLowerCase()
 
+    const [showModalIp, setShowModalIp] = useState<string | null>(null);
+
+    const openModal = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowModalIp(ip);
+    };
 
 
 
@@ -83,7 +93,7 @@ const IpRow: React.FC<IpRowProps> = ({
                 </span>
                 {inBlocklist === true && (
                     <a
-                        href="https://lists.blocklist.de/lists/all.txt"
+                        href={`https://lists.blocklist.de/lists/all.txt#:~:text=${ip}`}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -109,6 +119,33 @@ const IpRow: React.FC<IpRowProps> = ({
                         ))
                         : "—"}
                 </span>
+                <span
+                    className={styles.addButton}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Open details for ${ip}`}
+                    onClick={openModal}
+                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openModal(e)}
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                </span>
+
+                {showModalIp && (
+                    <Modal
+                        ip={showModalIp}
+                        onClose={() => setShowModalIp(null)}
+                        commonPorts={commonPorts}
+                        inBlocklist={inBlocklist}
+                        ping={ping}
+                        abuse={abuse}
+                        hostname={hostname}
+                        org={org}
+                        flag={flag}
+                        location={location}
+                    />
+                )}
 
 
             </div>

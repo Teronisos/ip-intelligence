@@ -50,7 +50,8 @@
     flex-wrap: wrap;
     max-width: 1000px;
 }
-.flag img{
+
+.flag img {
     width: 30px;
     height: 100%;
 
@@ -155,4 +156,48 @@
     margin: 0 0.3rem;
     color: #888;
     font-size: 0.7rem;
+}
+
+.addButton {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+    cursor: pointer;
+
+
+
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.addButton svg {
+    width: 16px;
+    height: 16px;
+
+    stroke: #e6faff;
+    stroke-width: 2;
+    stroke-linecap: round;
+
+    fill: none;
+
+    transition: transform 0.2s ease;
+}
+
+.addButton:hover {
+    transform: translateY(-1px) scale(1.08);
+    transform: scale(1.3);
+  
+}
+
+.addButton:hover svg {
+    transform: rotate(90deg);
+}
+
+.addButton:active {
+    transform: scale(0.95);
 }
