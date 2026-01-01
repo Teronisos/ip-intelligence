@@ -1,39 +1,97 @@
 [![Docker Compose CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml)
+![Status](https://img.shields.io/badge/Status-In%20Development-orange)
+
 
 # IP Intelligence
 
-Extract IPv4 addresses from logs, perform lookups, and check if they are reachable.  
-Lookup information is provided by [abuseipdb.com](https://www.abuseipdb.com/).
+Extract and analyze IPv4 addresses from log files, perform lookups, and verify reachability, abuse scores, and other detailed information.
+The platform integrates with [AbuseIPDB](https://www.abuseipdb.com/) to provide detailed threat intelligence for each IP address.
 
-Try the live demo  [here](https://ip-scan.teronisos.tech).
+
+
+---
+
+## Features
+- Extract IPv4 addresses from text using regular expressions
+- Basic HTTP, DNS, and SSH port checks
+- Blocklist check for suspicious or listed IPs
+- Abuse score evaluation from threat intelligence sources
+- Lookup of location and hostname information
+- Organization details such as ASN, company name, and address
+- Reachability verification
+
+---
+
+## Live Demo
+
+Try the online demo: [https://ip-scan.teronisos.tech](https://ip-scan.teronisos.tech)
 
 ![Screenshot](screen.png)
 
 ---
-## Download
+
+## Installation
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Teronisos/ip-intelligence.git
+cd ip-intelligence
 ```
-## Set Environment Variables
 
-### Client
+---
 
-Create `.env` file in `/client/web-ip-intelligence/`:<br>
-PORT=4000<br>
-REACT_APP_API_URL=NODE_SERVER_ENDPOINT (most of the time the ip of your server)
+## Configuration
 
+### Client configuration
 
-### Server
+Create an environment file:
 
-Create the `.env.server` file in `/server/`:<br>
+```
+/client/web-ip-intelligence/.env
+```
+
+Set:
+
+```bash
+PORT=4000
+REACT_APP_API_URL=NODE_SERVER_ENDPOINT
+```
+
+Replace `NODE_SERVER_ENDPOINT` with the server’s API endpoint (for example, the host IP or domain of your backend).
+
+---
+
+### Server configuration
+
+Create a file:
+
+```
+/server/.env.server
+```
+
+Set:
+
+```bash
 token=YOUR_ABUSEDBIP_TOKEN
+```
+
+You can obtain an API token by registering at [AbuseIPDB](https://www.abuseipdb.com/).
 
 ---
 
 ## Run with Docker Compose
 
-Build and start the containers:
+Build and start the entire stack:
 
 ```bash
 docker-compose build --no-cache
 docker-compose up -d
+```
+
+---
+
+## Contact
+
+For questions, feedback, or contributions, please reach out via  
+[contact@teronisos.tech](mailto:contact@teronisos.tech)

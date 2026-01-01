@@ -1,0 +1,16 @@
+.
+./server
+./server/node_modules
+./server/controller
+./server/routes
+./server/services
+./.github
+./.github/workflows
+./.git
+./.git/objects
+./.git/info
+./.git/logs
+./.git/hooks
+./.git/refs
+./client
+./client/web-ip-intelligence
