@@ -43,24 +43,7 @@ cd ip-intelligence
 
 ## Configuration
 
-### Client configuration
 
-Create an environment file:
-
-```
-/client/web-ip-intelligence/.env
-```
-
-Set:
-
-```bash
-PORT=4000
-REACT_APP_API_URL=NODE_SERVER_ENDPOINT
-```
-
-Replace `NODE_SERVER_ENDPOINT` with the server’s API endpoint (for example, the host IP or domain of your backend).
-
----
 
 ### Server configuration
 
@@ -79,7 +62,24 @@ token=YOUR_ABUSEDBIP_TOKEN
 You can obtain an API token by registering at [AbuseIPDB](https://www.abuseipdb.com/).
 
 ---
+### Client configuration
 
+Create an environment file:
+
+```
+/client/web-ip-intelligence/.env
+```
+
+Set:
+
+```bash
+PORT=4000
+REACT_APP_API_URL=NODE_SERVER_ENDPOINT
+```
+
+Replace `NODE_SERVER_ENDPOINT` with the server’s API endpoint (for example, the host IP or domain of your backend).
+
+---
 ## Run with Docker Compose
 
 Build and start the entire stack:

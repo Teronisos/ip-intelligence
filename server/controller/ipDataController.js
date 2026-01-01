@@ -37,13 +37,13 @@ exports.handleData = async (req, res) => {
         .then((abuseData) => {
             if (abuseData) {
                 ipRequestData = abuseData;
+
             } else {
                 ipRequestData.message = "No abuse data found for this IP";
             }
             res.json(ipRequestData);
         })
         .catch((error) => {
-            //console.error('Error fetching abuse data:', error);
             ipRequestData.message = "Error fetching abuse data";
             res.status(500).json(ipRequestData);
         }

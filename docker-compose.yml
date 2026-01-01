@@ -1,16 +1,42 @@
-version: "3.3"
+version: "3.9"
 
 services:
   server:
     build: ./server
+    container_name: ip-server
+    env_file:
+      - ./server/.env
     ports:
-      - "3000:3000"
-    restart: unless-stopped
+      - "3000:3000"   
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: npm run dev
+
   client:
-    build:
-      context: ./client/web-ip-intelligence
+    build: ./client
+    container_name: ip-client
+    env_file:
+      - ./client/.env
     ports:
-      - "4000:80"
-    restart: unless-stopped
+      - "3000:80"    
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - server
+
+  db:
+    image: postgres:15-alpine
+    container_name: ip-db
+    environment:
+      POSTGRES_USER: ip_user
+      POSTGRES_PASSWORD: ip_pass
+      POSTGRES_DB: ip_intelligence
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
