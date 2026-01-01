@@ -67,7 +67,7 @@ You can obtain an API token by registering at [AbuseIPDB](https://www.abuseipdb.
 Create an environment file:
 
 ```
-/client/web-ip-intelligence/.env
+/client/.env.client
 ```
 
 Set:

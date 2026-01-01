@@ -31,7 +31,6 @@ function checkPort(ip, port, timeout = 250) {
 
 
 exports.checkCommonPorts = async (ip) => {
-    console.log(`Checking common ports on ${ip}...`);
 
     const results = await Promise.all([
         checkPort(ip, 80),  // HTTP

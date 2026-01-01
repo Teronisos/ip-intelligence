@@ -3,7 +3,6 @@ const axios = require('axios');
 exports.getAbuseData = async (ip) => {
   try {
     const token = process.env.NODE_API_TOKEN;
-    console.log('AbuseIPDB Token:', token);
     if (!token) {
       return { data: 'N/A' };
     }
@@ -18,7 +17,7 @@ exports.getAbuseData = async (ip) => {
 
     return response.data;
   } catch (error) {
-    console.error('Fehler beim Abrufen von AbuseIPDB-Daten:', error.message || error);
+    console.error('Error when fetching AbuseIPDB data:', error.message || error);
     return { data: 'N/A' };
   }
 };
