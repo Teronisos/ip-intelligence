@@ -17,14 +17,14 @@ const FetchBackendAPI = async (ip: string): Promise<EvaluatedIpData> => {
         }))
         : [];
 
-
+        console.log("Backend API data:", data.countryCode);
 
     return {
         ip: data.ip,
         hostname: data.domain || undefined,
         abuse: `Abuse: ${data.abuse ?? 0}%`,
         ping: data.pingStatus || false,
-        location: "n/a",
+        country: data.countryCode || undefined,
         commonPorts: commonPortsArray,
         inBlocklist: data.inBlocklist !== undefined ? data.inBlocklist : "no info"
     };

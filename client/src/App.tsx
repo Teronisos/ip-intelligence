@@ -17,7 +17,7 @@ const App = () => {
   const [backendError, setBackendError] = useState(false);
 
   const getIPInformations = async (ip: string): Promise<EvaluatedIpData> => {
-    let backendData: Partial<EvaluatedIpData> = {}; // Default leeres Objekt
+    let backendData: Partial<EvaluatedIpData> = {};
     setBackendError(false);
     try {
       backendData = await FetchBackendAPI(ip);
@@ -35,12 +35,12 @@ const App = () => {
     return {
       ip: backendData.ip || oxlData.ip,
       abuse: backendData.abuse || "n/a",
-      abuseMail: backendData.abuseMail || oxlData.abuseMail,
-      ping: backendData.ping || "n/a",
+      abuseMail: ripeData.abuseMail || "n/a",
+      ping: backendData.ping || false,
       commonPorts,
       inBlocklist: backendData.inBlocklist ?? "n/a",
       hostname: backendData.hostname || oxlData.hostname,
-      location: ripeData.location || oxlData.location,
+      country: ripeData.country || oxlData.country || backendData.country || "n/a",
       org: backendData.org || oxlData.org,
       company: backendData.company || oxlData.company,
       asn: oxlData.asn ?? "n/a",
@@ -58,6 +58,7 @@ const App = () => {
     for (const ip of ips) {
       try {
         const data = await getIPInformations(ip);
+        console.log(data)
         setIpInfos(prev => [...prev, data]);
       } catch (err) {
         console.error(`Fehler bei IP ${ip}:`, err);
@@ -95,10 +96,10 @@ const App = () => {
         if (ips.length > 0) {
           resolvedIPs.push(...ips);
         } else {
-          console.warn(`Domain konnte nicht aufgelöst werden: ${domain}`);
+          console.warn(`Domain could not be resolved: ${domain}`);
         }
       } catch (err) {
-        console.error(`Fehler bei Domain ${domain}:`, err);
+        console.error(`Error resolving domain ${domain}:`, err);
       }
     }
 
@@ -109,8 +110,13 @@ const App = () => {
 
   return (
     <>
+      <div id="screen-warning">
+        <strong>Insufficient Screen Resolution</strong>
+        <span>This application is optimized for large displays.<br />
+          Please expand your browser window to at least 1800px.</span>
+      </div>
       <header>
-        <span className="version">v2025-12</span>
+        <span className="version">v2026-01</span>
         <div className="rightHeader">
           <h1>
             <span className="highlight-box">IP Intelligence</span> Dashboard
@@ -118,12 +124,12 @@ const App = () => {
         </div>
       </header>
 
-      {/* Backend Error Banner über dem Dashboard */}
       {backendError && (
         <div className="backend-error-banner">
           <strong>⚠️ Backend could not be reached!</strong>
           <p>
             Some data as abuse score, ping and port check might be missing as the backend API could not be reached.
+
           </p>
         </div>
       )}
@@ -141,7 +147,7 @@ const App = () => {
                 key={index}
                 ip={info.ip}
                 hostname={info.hostname}
-                location={info.location}
+                country={info.country}
                 org={info.org}
                 company={info.company}
                 asn={info.asn}

@@ -9,17 +9,17 @@ const FetchOXL = async (ip: string): Promise<EvaluatedIpData> => {
 
         const evaluatedData: EvaluatedIpData = {
             ip,
-            abuse: data.contacts?.noc?.email || "",        // Abuse email von NOC
+            abuse: data.contacts?.noc?.email || "",      
             abuseMail: data.contacts?.noc?.email || undefined,
-            ping: false,                                   // ping nicht aus API verfügbar, Default false
-            commonPorts: [],                               // Ports nicht aus API, leer lassen
-            inBlocklist: false,                            // nicht aus API, Default false
-            hostname: undefined,                           // nicht verfügbar                        // nicht verfügbar
-            location: data.organization.country,
+            ping: false,                                 
+            commonPorts: [],                          
+            inBlocklist: false,                           
+            hostname: undefined,                                              
+            country: data.organization.country,
             org: data.organization?.name || data.info?.name || undefined,
             company: data.organization?.name || undefined,
             asn: data.asn?.toString() || undefined,
-            nat: false                                     // nicht verfügbar, Default false
+            nat: false                                     
         };
 
         return evaluatedData;
@@ -31,7 +31,7 @@ const FetchOXL = async (ip: string): Promise<EvaluatedIpData> => {
             ping: false,
             commonPorts: [],
             inBlocklist: false,
-            location: "",
+            country: "",
         };
     }
 

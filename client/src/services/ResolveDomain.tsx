@@ -16,7 +16,7 @@ const ResolveDomain = async (domain: string): Promise<string[]> => {
         const answers: DnsAnswer[] = data.Answer || [];
 
         const ips = answers
-            .filter((a) => a.type === 1) // 1 = A-Record (IPv4)
+            .filter((a) => a.type === 1) 
             .map((a) => a.data);
 
         return ips;

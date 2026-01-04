@@ -8,7 +8,7 @@ import EvaluatedIpData from '../structs/EvaluatedIpData';
 const IpRow: React.FC<EvaluatedIpData> = ({
     ip,
     hostname,
-    location,
+    country: location,
     org,
     company,
     asn,
@@ -35,7 +35,7 @@ const IpRow: React.FC<EvaluatedIpData> = ({
             abuseClass = styles.abuseSuccess;
     }
 
-    const flagSymbol = location.toLowerCase()
+    const flagSymbol = location?.toLowerCase() || "n/a";
 
     const [showModalIp, setShowModalIp] = useState<string | null>(null);
 
@@ -48,40 +48,35 @@ const IpRow: React.FC<EvaluatedIpData> = ({
 
 
     return (
+    <li className={styles.ipItem}>
+        <div className={styles.ipLeft}>
+            <span className={styles.ipAddress}>{ip}</span>
+            <small className={styles.hostname}>{hostname}</small>
+        </div>
 
-        <li className={styles.ipItem}>
-            {/* IP + Hostname */}
-            <div className={styles.ipLeft}>
-                <span className={styles.ipAddress}>{ip}</span>
-                <small className={styles.hostname}>{hostname}</small>
+        <div className={styles.ipMid}>
+            <div className={styles.flag}>
+                <Flag code={flagSymbol} />
             </div>
+            <span className={styles.trenner}>•</span>
+            <span>{location}</span>
+            <span className={styles.trenner}>•</span>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {org}
+            </span>
+        </div>
 
-            {/* Middle */}
-            <div className={styles.ipMid}>
-                <span className={styles.flag}>
-                    <Flag code={flagSymbol} />
-                </span>
-                <span className={styles.trenner}>•</span>
-                <span>{location}</span>
-                <span className={styles.trenner}>•</span>
-                <span>{org}</span>
-            </div>
+        <div className={styles.ipRight}>
+            <span className={`${styles.statusTag} ${abuseClass}`}>
+                {abuse !== "n/a" ? (abuse.includes('%') ? abuse : `${abuse}%`) : "n/a"}
+            </span>
 
+            <span className={`${styles.statusTag} ${ping ? styles.pingSuccess : styles.pingDanger}`}>
+                PING
+            </span>
 
-            {/* Status */}
-            <div className={styles.ipRight}>
-                <span className={`${styles.statusTag} ${abuseClass}`}>
-                    {abuse !== "n/a" ? abuse : "n/a"}
-                </span>
-
-                {/* Ping */}
-                <span
-                    className={`${styles.statusTag} ${ping && ping !== "n/a" ? styles.pingSuccess : styles.pingDanger
-                        }`}
-                >
-                    {ping && ping !== "n/a" ? pingText : "n/a"}
-                </span>
-                {inBlocklist === true && (
+            <div className={styles.blocklistWrapper}>
+                {inBlocklist === true ? (
                     <a
                         href={`https://lists.blocklist.de/lists/all.txt#:~:text=${ip}`}
                         target="_blank"
@@ -89,61 +84,62 @@ const IpRow: React.FC<EvaluatedIpData> = ({
                     >
                         <span className={`${styles.statusTag} ${styles.blocked}`}>in blocklist</span>
                     </a>
-                )}
-                {inBlocklist === false && (
+                ) : inBlocklist === false ? (
                     <span className={`${styles.statusTag} ${styles.clean}`}>clean</span>
-                )}
-                {inBlocklist !== true && inBlocklist !== false && (
+                ) : (
                     <span className={`${styles.statusTag} ${styles.noInfo}`}>
                         {inBlocklist === "n/a" ? "n/a" : "❔ No Info"}
                     </span>
                 )}
-
-                <span className={styles.statusTag}>
-                    {commonPorts && commonPorts.length > 0
-                        ? commonPorts.map((p) => (
-                            <span
-                                key={p.port}
-                                className={`${styles.portOpen} ${!p.open ? styles.portClosed : ""}`}
-                            >
-                                {p.port}
-                            </span>
-                        ))
-                        : "—"}
-                </span>
-                <span
-                    className={styles.addButton}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Open details for ${ip}`}
-                    onClick={openModal}
-                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openModal(e)}
-                >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
-                </span>
-
-                {showModalIp && (
-                    <Modal
-                        ip={showModalIp}
-                        onClose={() => setShowModalIp(null)}
-                        commonPorts={commonPorts}
-                        inBlocklist={inBlocklist}
-                        ping={ping}
-                        abuse={abuse}
-                        hostname={hostname}
-                        org={org}
-                        location={location}
-                    />
-                )}
-
-
             </div>
 
-        </li>
-    );
-};
+            <div className={styles.portGroup}>
+                {commonPorts && commonPorts.length > 0 && commonPorts[0].port !== "n/a" ? (
+                    commonPorts.map((p) => (
+                        <span
+                            key={p.port}
+                            className={`${styles.portOpen} ${!p.open ? styles.portClosed : ""}`}
+                        >
+                            {p.port}
+                        </span>
+                    ))
+                ) : (
+                    <span style={{ color: '#44475a' }}>—</span>
+                )}
+            </div>
+
+            <div
+                className={styles.addButton}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open details for ${ip}`}
+                onClick={openModal}
+                onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openModal(e)}
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="3">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+            </div>
+        </div>
+
+
+        {showModalIp && (
+            <Modal
+                ip={showModalIp}
+                commonPorts={commonPorts}
+                inBlocklist={inBlocklist}
+                ping={ping}
+                abuse={abuse}
+                hostname={hostname}
+                org={org}
+                country={location}
+                abuseMail={abuseMail}
+                asn={asn}
+                onClose={() => setShowModalIp(null)}
+            />
+        )}
+    </li>
+);};
 
 
 export default IpRow;

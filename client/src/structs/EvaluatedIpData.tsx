@@ -4,14 +4,13 @@ type CommonPorts = {
 };
 
  type EvaluatedIpData = {
-    onClose?: () => void;
     ip: string;
     abuse: string;
     ping: string | boolean;
     commonPorts: CommonPorts[];
     inBlocklist: boolean | string;
     hostname?: string;
-    location: string;
+    country: string;
     org?: string;
     company?: string;
     abuseMail?: string;

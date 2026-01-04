@@ -9,6 +9,86 @@
     flex-direction: column;
   }
 
+  #screen-warning {
+    display: none;
+  }
+
+  @media (max-width: 1799px) {
+
+
+    #screen-warning {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      color: #d32f2f;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #screen-warning::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: -1;
+    }
+
+    #screen-warning strong {
+      font-size: 48px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #screen-warning span {
+      font-size: 1.1rem;
+      font-weight: normal;
+      color: #fff;
+    }
+
+    body {
+      overflow: hidden;
+    }
+  }
+
+  #screen-warning::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Hier passiert die Magie */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Für Safari Support */
+
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Optionaler heller Schleier */
+    z-index: -1;
+    /* Legt den Blur HINTER den Text der Warnung */
+  }
+
+  /* Verhindert, dass man im Hintergrund scrollt oder klickt */
+  body {
+    overflow: hidden;
+  }
+
+
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
@@ -75,6 +155,7 @@
     padding: 2rem;
     gap: 2rem;
     flex-wrap: wrap;
+
   }
 
   .input-card {
@@ -82,7 +163,7 @@
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 500px;
+    width: 400px;
     height: 700px;
   }
 
@@ -119,13 +200,9 @@
   .backend-error-banner {
     width: 100%;
     max-width: 1200px;
-    /* passt sich an den Dashboard-Bereich an */
     margin: 1rem auto;
-    /* zentriert über dem Dashboard */
     background-color: #ff555530;
-    /* leicht transparentes Rot für Warnung */
     border-left: 6px solid #ff5555;
-    /* starke Hervorhebung */
     color: #ff5555;
     padding: 1rem 2rem;
     font-family: 'Roboto Mono', monospace;
@@ -134,9 +211,7 @@
     gap: 0.4rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
-    /* sanfter Schatten */
     animation: slideDown 0.5s ease-out;
-    /* sanftes Einblenden */
   }
 
   .backend-error-banner strong {
@@ -150,7 +225,6 @@
     opacity: 0.9;
   }
 
-  /* Optional: Slide-down Animation für professionellen Effekt */
   @keyframes slideDown {
     0% {
       transform: translateY(-20px);

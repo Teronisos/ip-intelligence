@@ -1,203 +1,157 @@
 .ipItem {
-    background: #2b2d3a;
-    border-radius: 14px;
-    padding: 1rem 1.2rem;
+    background: rgba(32, 38, 50, 0.85); 
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
     margin-bottom: 0.8rem;
-    display: grid;
-    grid-template-columns: 180px 1fr auto;
-    gap: 0.8rem;
+    display: flex;
     align-items: center;
-    font-size: 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-    transition: background 0.2s ease, transform 0.12s ease-out;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    min-height: 65px;
+    list-style: none;
+
+
+}
+.ipItem:hover {
+    background: rgba(44, 50, 66, 0.95);
+    border-color: rgba(92, 184, 92, 0.4); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);;
 }
 
-.ipItem:hover {
-    background: #333544;
-    transform: translateY(-2px);
+.flag {
+    display: flex;
+    align-items: center;
+    min-width: 30px;
+}
+
+.flag img, .flag svg {
+    width: 24px !important;
+    height: auto;
+    display: block;
+    border-radius: 2px;
 }
 
 .ipLeft {
-    display: flex;
-    flex-direction: column;
-    color: #50fa7b;
-    font-weight: 600;
+    width: 190px;
+    flex-shrink: 0;
 }
 
 .ipAddress {
     font-family: 'Roboto Mono', monospace;
     font-weight: 700;
-    font-size: 0.9rem;
-    color: #50fa7b;
+    font-size: 1rem;
+    color: #cce5ff; 
 }
 
 .hostname {
     font-size: 0.75rem;
-    color: #999;
-    margin-top: 0.25rem;
-    font-weight: 400;
-    font-style: italic;
+    color: #a0a8b0; 
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ipMid {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: #bbb;
-    font-size: 0.8rem;
     flex: 1;
-    flex-wrap: wrap;
-    max-width: 1000px;
-}
-
-.flag img {
-    width: 30px;
-    height: 100%;
-
-}
-
-
-
-.ipRight {
-    justify-content: flex-end;
-    text-align: right;
     display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    width: 500px;
-}
-
-.statusTag {
-    display: inline-flex;
-    justify-content: center;
     align-items: center;
-    padding: 0 10px;
-    height: 24px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 18px;
-    color: #fff;
-    min-width: 80px;
-}
-
-.blocked {
-    background-color: #ef4444;
-}
-
-.clean {
-    background-color: #22c55e;
-}
-
-.noInfo {
-    background-color: #6b7280;
-}
-
-.abuseSuccess {
-    background-color: #16a34a;
-}
-
-.abuseWarning {
-    background-color: #facc15;
-    color: #222;
-}
-
-.abuseDanger {
-    background-color: #dc2626;
-}
-
-.pingSuccess,
-.pingDanger {
-    background-color: #4caf50;
-    width: auto;
-    min-width: unset;
-    padding: 0 10px;
-}
-
-.pingDanger {
-    background-color: #f87171;
-}
-
-
-
-.portOpen,
-.portClosed {
-    border-radius: 18px;
-    padding: 0 8px;
-    height: 24px;
-    font-size: 0.7rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    margin: 2px;
-}
-
-.portOpen {
-    background-color: #22c55e;
-}
-
-.portClosed {
-    background-color: #ef4444;
-}
-
-@media (max-width: 1024px) {
-    .ipItem {
-        grid-template-columns: 1fr;
-    }
-
-    .ipRight {
-        width: 100%;
-        justify-content: flex-start;
-    }
+    gap: 0.6rem;
+    color: #f0f0f0;
+    font-size: 0.9rem;
+    min-width: 0;
 }
 
 .trenner {
-    margin: 0 0.3rem;
-    color: #888;
-    font-size: 0.7rem;
+    color: #5a5f70;
 }
+
+.ipRight {
+    display: grid;
+    grid-template-columns: 90px 70px 120px auto 40px;
+    align-items: center;
+    gap: 1.2rem;
+    flex-shrink: 0;
+}
+
+.ipRight a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.statusTag {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+
+.abuseDanger  { background: #d9534f; color: #fff; }   
+.abuseWarning { background: #f0ad4e; color: #fff; }     
+.abuseSuccess { background: #5cb85c; color: #fff; }   
+
+.pingSuccess { background: rgba(92, 184, 92, 0.15); color: #5cb85c; border: 1px solid rgba(92, 184, 92, 0.4); }
+.pingDanger  { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.4); }
+
+.blocked { background: #d9534f !important; color: #fff !important; border: none; }
+.clean   { background: rgba(92, 184, 92, 0.2); color: #5cb85c; border: 1px solid rgba(92, 184, 92, 0.4); }
+.noInfo  { background: #5a5f70; color: #f0f0f0; }
+
+.portGroup {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 6px; 
+    align-items: center;
+    overflow-x: visible;
+}
+
+.portOpen, .portClosed {
+    height: 24px;
+    min-width: 38px;
+    padding: 0 6px;
+    font-size: 0.75rem;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.portOpen   { background: #5cb85c; color: #fff; }
+.portClosed { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.4); }
 
 .addButton {
-    width: 24px;
-    height: 24px;
-    display: grid;
-    place-items: center;
-
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-
-
-
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.addButton svg {
-    width: 16px;
-    height: 16px;
-
-    stroke: #e6faff;
-    stroke-width: 2;
-    stroke-linecap: round;
-
-    fill: none;
-
-    transition: transform 0.2s ease;
 }
 
 .addButton:hover {
-    transform: translateY(-1px) scale(1.08);
-    transform: scale(1.3);
-  
+    background: #5cb85c;
 }
 
-.addButton:hover svg {
-    transform: rotate(90deg);
-}
-
-.addButton:active {
-    transform: scale(0.95);
+.addButton svg {
+    width: 18px;
+    height: 18px;
+    stroke: #f0f0f0;
 }
