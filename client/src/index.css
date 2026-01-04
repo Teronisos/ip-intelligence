@@ -115,3 +115,50 @@
     color: #80deea;
     text-shadow: 0 0 8px rgba(128, 222, 234, 0.8);
   }
+
+  .backend-error-banner {
+    width: 100%;
+    max-width: 1200px;
+    /* passt sich an den Dashboard-Bereich an */
+    margin: 1rem auto;
+    /* zentriert über dem Dashboard */
+    background-color: #ff555530;
+    /* leicht transparentes Rot für Warnung */
+    border-left: 6px solid #ff5555;
+    /* starke Hervorhebung */
+    color: #ff5555;
+    padding: 1rem 2rem;
+    font-family: 'Roboto Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
+    /* sanfter Schatten */
+    animation: slideDown 0.5s ease-out;
+    /* sanftes Einblenden */
+  }
+
+  .backend-error-banner strong {
+    font-size: 1.05rem;
+  }
+
+  .backend-error-banner p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  /* Optional: Slide-down Animation für professionellen Effekt */
+  @keyframes slideDown {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }

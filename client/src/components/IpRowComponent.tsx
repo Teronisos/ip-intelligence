@@ -2,39 +2,23 @@ import React, { useState } from 'react';
 import styles from './IpRowComponent.module.css';
 import Flag from 'react-world-flags';
 import Modal from './Modal';
-
-export type CommonPort = {
-    port: number;
-    open: boolean;
-};
-
-interface IpRowProps {
-    ip: string;
-    hostname: string;
-    flag: string;
-    location: string;
-    org: string;
-    abuse: string;
-    ping: string | boolean;
-    abuseColor?: string;
-    pingColor?: string;
-    commonPorts?: CommonPort[];
-    inBlocklist: boolean;
-}
+import EvaluatedIpData from '../structs/EvaluatedIpData';
 
 
-const IpRow: React.FC<IpRowProps> = ({
+const IpRow: React.FC<EvaluatedIpData> = ({
     ip,
     hostname,
-    flag,
     location,
     org,
+    company,
+    asn,
     abuse,
+    abuseMail,
     ping,
-    commonPorts = [],
-    inBlocklist
+    commonPorts,
+    inBlocklist,
+    nat
 }) => {
-    const pingClass = ping === "true" || ping === true ? styles.pingSuccess : styles.pingDanger;
     const pingText = "ping"
 
     const abuseValue = parseInt(abuse.match(/\d+/)?.[0] || "0", 10);
@@ -51,7 +35,7 @@ const IpRow: React.FC<IpRowProps> = ({
             abuseClass = styles.abuseSuccess;
     }
 
-    const flagSymbol = flag.toLowerCase()
+    const flagSymbol = location.toLowerCase()
 
     const [showModalIp, setShowModalIp] = useState<string | null>(null);
 
@@ -86,10 +70,16 @@ const IpRow: React.FC<IpRowProps> = ({
 
             {/* Status */}
             <div className={styles.ipRight}>
-                <span className={`${styles.statusTag} ${abuseClass}`}>{abuse}</span>
+                <span className={`${styles.statusTag} ${abuseClass}`}>
+                    {abuse !== "n/a" ? abuse : "n/a"}
+                </span>
 
-                <span className={`${styles.statusTag} ${ping ? styles.pingSuccess : styles.pingDanger}`}>
-                    {pingText}
+                {/* Ping */}
+                <span
+                    className={`${styles.statusTag} ${ping && ping !== "n/a" ? styles.pingSuccess : styles.pingDanger
+                        }`}
+                >
+                    {ping && ping !== "n/a" ? pingText : "n/a"}
                 </span>
                 {inBlocklist === true && (
                     <a
@@ -104,7 +94,9 @@ const IpRow: React.FC<IpRowProps> = ({
                     <span className={`${styles.statusTag} ${styles.clean}`}>clean</span>
                 )}
                 {inBlocklist !== true && inBlocklist !== false && (
-                    <span className={`${styles.statusTag} ${styles.noInfo}`}>❔ No Info</span>
+                    <span className={`${styles.statusTag} ${styles.noInfo}`}>
+                        {inBlocklist === "n/a" ? "n/a" : "❔ No Info"}
+                    </span>
                 )}
 
                 <span className={styles.statusTag}>
@@ -142,7 +134,6 @@ const IpRow: React.FC<IpRowProps> = ({
                         abuse={abuse}
                         hostname={hostname}
                         org={org}
-                        flag={flag}
                         location={location}
                     />
                 )}

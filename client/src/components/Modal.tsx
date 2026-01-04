@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 import Flag from 'react-world-flags';
+import EvaluatedIpData from '../structs/EvaluatedIpData';
 import type {
     ICountry,
     ICountryData,
@@ -12,19 +13,6 @@ import type {
 } from 'countries-list'
 import { getCountryData } from 'countries-list'
 
-
-interface ModalProps {
-    ip?: string | null;
-    onClose?: () => void;
-    commonPorts?: { port: number; open: boolean }[];
-    inBlocklist?: boolean | string;
-    ping?: string | boolean;
-    abuse?: string;
-    hostname?: string;
-    org?: string;
-    flag?: string;
-    location?: string;
-}
 
 const fetchRIPE = async (ip: string): Promise<any> => {
     try {
@@ -39,7 +27,7 @@ const fetchRIPE = async (ip: string): Promise<any> => {
 };
 
 
-const Modal: React.FC<ModalProps> = ({ ip, onClose, commonPorts = [], inBlocklist, ping, abuse, hostname, org, flag, location }) => {
+const Modal: React.FC<EvaluatedIpData> = ({ ip, onClose, commonPorts = [], inBlocklist, ping, abuse, hostname, org, location }) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
@@ -232,7 +220,7 @@ const Modal: React.FC<ModalProps> = ({ ip, onClose, commonPorts = [], inBlocklis
     };
     const httpHref = ip ? `http://${formatHostForUrl(ip)}` : undefined;
 
-    const effectiveFlag = flag ?? countryCode ?? undefined;
+    const effectiveFlag = countryCode ?? undefined;
 
     const parseAbusePct = (s?: string | null): number | null => {
         const text = s ?? data?.abuse ?? null;
@@ -301,7 +289,8 @@ const Modal: React.FC<ModalProps> = ({ ip, onClose, commonPorts = [], inBlocklis
                                                     </span>
                                                 )}
 
-                                                {getCountryData(location ?? data?.country ?? '')?.name ?? '—'}
+                                                {getCountryData((location ?? data?.country ?? 'DE') as TCountryCode)?.name ?? '—'}
+
                                             </div>
                                         </div>
 

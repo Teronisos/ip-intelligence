@@ -1,96 +1,66 @@
 import InsertBoxComponent from "./components/InsertBoxComponent";
 import IpRow from "./components/IpRowComponent";
 import ExtractIPsButton from "./components/ExtractIPsButton";
-import React, { useRef, useState } from "react";
-import axios from "axios";
+import { useRef, useState } from "react";
+import FetchBackendAPI from "./services/FetchBackendAPI";
+import FetchOXL from "./services/FetchOXL";
+import FetchRIPE from "./services/FetchRIPE";
+import ResolveDomain from "./services/ResolveDomain";
+import ValidateIP from "./services/ValidateIP";
+import EvaluatedIpData from "./structs/EvaluatedIpData";
 
-type CommonPort = {
-  port: number;
-  open: boolean;
-};
-
-interface IPInfo {
-  ip: string;
-  hostname: string;
-  flag: string;
-  location: string;
-  org: string;
-  abuse: string;
-  ping: string | boolean;
-  commonPorts: CommonPort[];
-  inBlocklist: boolean;
-}
-
-type DnsAnswer = {
-  name: string;
-  type: number;
-  TTL: number;
-  data: string;
-};
-
-
-
-const resolveDomain = async (domain: string): Promise<string[]> => {
-  try {
-    //console.log(domain)
-    const res = await fetch(
-      `https://dns.google/resolve?name=${domain}&type=A`
-    );
-    const data = await res.json();
-
-    const answers: DnsAnswer[] = data.Answer || [];
-
-    const ips = answers
-      .filter((a) => a.type === 1) // 1 = A-Record (IPv4)
-      .map((a) => a.data);
-
-    return ips;
-  } catch (e) {
-    console.error("DNS lookup failed for:", domain);
-    return [];
-  }
-};
 
 const App = () => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [ipInfos, setIpInfos] = useState<IPInfo[]>([]);
+  const [ipInfos, setIpInfos] = useState<EvaluatedIpData[]>([]);
+  const [backendError, setBackendError] = useState(false);
+
+  const getIPInformations = async (ip: string): Promise<EvaluatedIpData> => {
+    let backendData: Partial<EvaluatedIpData> = {}; // Default leeres Objekt
+    setBackendError(false);
+    try {
+      backendData = await FetchBackendAPI(ip);
+    } catch (error) {
+      console.error("Error fetching from backend API:", error);
+      setBackendError(true);
+
+    }
+    const commonPorts = backendData.commonPorts?.length
+      ? backendData.commonPorts
+      : [{ port: "n/a", open: false }];
+
+    const [oxlData, ripeData] = await Promise.all([FetchOXL(ip), FetchRIPE(ip)]);
+
+    return {
+      ip: backendData.ip || oxlData.ip,
+      abuse: backendData.abuse || "n/a",
+      abuseMail: backendData.abuseMail || oxlData.abuseMail,
+      ping: backendData.ping || "n/a",
+      commonPorts,
+      inBlocklist: backendData.inBlocklist ?? "n/a",
+      hostname: backendData.hostname || oxlData.hostname,
+      location: ripeData.location || oxlData.location,
+      org: backendData.org || oxlData.org,
+      company: backendData.company || oxlData.company,
+      asn: oxlData.asn ?? "n/a",
+      nat: backendData.nat ?? oxlData.nat,
+    };
+  };
+
+
   const handleClick = async () => {
-    const value = textareaRef.current?.value;
-    const extracted = extractIPs(value ?? "");
+    const value = textareaRef.current?.value ?? "";
+    const ips = await extractIPs(value);
 
     setIpInfos([]);
 
-    for (const item of extracted) {
-      let ips: string[] = [];
-
-
-      const isIPv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(item);
-
-      if (isIPv4) {
-
-        ips = [item];
-      } else {
-
-        ips = await resolveDomain(item);
-        //console.log(ips)
-        if (ips.length === 0) {
-          console.error(`Domain konnte nicht aufgelöst werden: ${item}`);
-          continue;
-        }
-      }
-
-
-      for (const ip of ips) {
-        try {
-          //console.log(ip)
-          const data = await fetchIPDetails(ip);
-
-          setIpInfos(prev => [...prev, data]);
-
-        } catch (error) {
-          console.error("Fehler bei IP:", ip, error);
-        }
+    for (const ip of ips) {
+      try {
+        const data = await getIPInformations(ip);
+        setIpInfos(prev => [...prev, data]);
+      } catch (err) {
+        console.error(`Fehler bei IP ${ip}:`, err);
       }
     }
   };
@@ -98,102 +68,43 @@ const App = () => {
 
 
 
-  const extractIPs = (text: string): string[] => {
+  const extractIPs = async (text: string): Promise<string[]> => {
     const ipv4Regex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
-    const ipv6Regex = /\b[a-fA-F0-9:]{2,}\b/g;
+    const ipv6Regex = /\b(?:[a-fA-F0-9]{1,4}:){2,7}[a-fA-F0-9]{0,4}\b/g;
     const domainRegex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})\b/g;
 
-    const ipv4s = (text.match(ipv4Regex) || []).filter(isPublicIPv4);
-    const ipv6s = (text.match(ipv6Regex) || []).filter(isPublicIPv6);
-    const domains = (text.match(domainRegex) || [])
-      .filter(d => d.toLowerCase() !== 'localhost');
+    const ipv4s = (text.match(ipv4Regex) || []).filter(ip => {
+      const result = ValidateIP(ip);
+      return result.valid && result.version === "ipv4";
+    });
 
-    return Array.from(new Set([...ipv4s, ...ipv6s, ...domains]));
-  };
+    const ipv6s = (text.match(ipv6Regex) || []).filter(ip => {
+      const result = ValidateIP(ip);
+      return result.valid && result.version === "ipv6";
+    });
 
-  const isValidIPv6 = (ip: string): boolean => {
-    // nur ein "::" erlaubt
-    if (ip.split('::').length > 2) return false;
-
-    const parts = ip.includes('::')
-      ? ip.replace('::', ':'.repeat(9 - ip.split(':').length)).split(':')
-      : ip.split(':');
-
-    if (parts.length !== 8) return false;
-
-    return parts.every(p =>
-      p === '' || /^[a-fA-F0-9]{1,4}$/.test(p)
+    const domains = (text.match(domainRegex) || []).filter(
+      d => d.toLowerCase() !== "localhost"
     );
-  };
 
+    const resolvedIPs: string[] = [];
 
-
-
-  const isPublicIPv6 = (ip: string): boolean => {
-    if (!isValidIPv6(ip)) return false;
-
-    const n = ip.toLowerCase();
-
-    return !(
-      n === '::' ||                  // Unspecified
-      n === '::1' ||                 // Loopback
-      n.startsWith('fe80:') ||       // Link-local
-      n.startsWith('fc') ||          // ULA
-      n.startsWith('fd') ||          // ULA
-      n.startsWith('ff')             // Multicast
-    );
-  };
-
-
-  const isPublicIPv4 = (ip: string): boolean => {
-    const parts = ip.split('.').map(Number);
-    if (parts.length !== 4 || parts.some(p => p < 0 || p > 255)) {
-      return false;
+    for (const domain of domains) {
+      try {
+        const ips = await ResolveDomain(domain);
+        if (ips.length > 0) {
+          resolvedIPs.push(...ips);
+        } else {
+          console.warn(`Domain konnte nicht aufgelöst werden: ${domain}`);
+        }
+      } catch (err) {
+        console.error(`Fehler bei Domain ${domain}:`, err);
+      }
     }
 
-    const [a, b, c, d] = parts;
-
-    return !(
-      a === 0 ||                          // 0.0.0.0/8
-      a === 10 ||                         // 10.0.0.0/8
-      a === 127 ||                        // Loopback
-      (a === 169 && b === 254) ||         // Link-local
-      (a === 172 && b >= 16 && b <= 31) ||// 172.16.0.0/12
-      (a === 192 && b === 168) ||         // 192.168.0.0/16
-      (a >= 224 && a <= 239) ||           // Multicast
-      (a >= 240) ||                       // Reserved
-      (a === 255 && b === 255 && c === 255 && d === 255)
-    );
+    return Array.from(new Set([...ipv4s, ...ipv6s, ...resolvedIPs]));
   };
 
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const fetchIPDetails = async (ip: string): Promise<IPInfo> => {
-    const response = await axios.get(`${apiUrl}/api/ip`, { params: { q: ip } });
-    const data = response.data;
-
-
-    const commonPortsArray: CommonPort[] = data.commonPorts
-      ? Object.entries(data.commonPorts).map(([port, isOpen]) => ({
-        port: parseInt(port.replace("port", ""), 10),
-        open: Boolean(isOpen),
-      }))
-      : [];
-
-
-
-    return {
-      ip: data.ip,
-      hostname: data.domain || "unknown",
-      flag: data.countryCode || "unknown",
-      location: `${data.countryCode || ""}`,
-      org: data.isp || "unknown",
-      abuse: `Abuse: ${data.abuse ?? 0}%`,
-      ping: data.pingStatus || false,
-      commonPorts: commonPortsArray,
-      inBlocklist: data.inBlocklist !== undefined ? data.inBlocklist : "no info"
-    };
-  };
 
 
   return (
@@ -201,9 +112,21 @@ const App = () => {
       <header>
         <span className="version">v2025-12</span>
         <div className="rightHeader">
-          <h1><span className="highlight-box">IP Intelligence</span> Dashboard</h1>
+          <h1>
+            <span className="highlight-box">IP Intelligence</span> Dashboard
+          </h1>
         </div>
       </header>
+
+      {/* Backend Error Banner über dem Dashboard */}
+      {backendError && (
+        <div className="backend-error-banner">
+          <strong>⚠️ Backend could not be reached!</strong>
+          <p>
+            Some data as abuse score, ping and port check might be missing as the backend API could not be reached.
+          </p>
+        </div>
+      )}
 
       <div className="dashboard">
         <div className="input-card">
@@ -218,18 +141,22 @@ const App = () => {
                 key={index}
                 ip={info.ip}
                 hostname={info.hostname}
-                flag={info.flag}
                 location={info.location}
                 org={info.org}
+                company={info.company}
+                asn={info.asn}
                 abuse={info.abuse}
+                abuseMail={info.abuseMail}
                 ping={info.ping}
                 commonPorts={info.commonPorts}
                 inBlocklist={info.inBlocklist}
+                nat={info.nat}
               />
             ))}
           </ul>
         </div>
       </div>
+
       <footer className="footer">
         <p>
           🚀 Get Code on&nbsp;
@@ -241,6 +168,5 @@ const App = () => {
     </>
   );
 };
-
 export default App;
 
