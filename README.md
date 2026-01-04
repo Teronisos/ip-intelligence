@@ -26,7 +26,9 @@ The platform integrates with [AbuseIPDB](https://www.abuseipdb.com/) to provide 
 
 Try the online demo: [https://ip-scan.teronisos.tech](https://ip-scan.teronisos.tech)
 
-![Screenshot](screen.png)
+![Screenshot](screen_2.png)
+
+![Screenshot](screen_1.png)
 
 ---
 
@@ -59,7 +61,7 @@ Set:
 token=YOUR_ABUSEDBIP_TOKEN
 ```
 
-You can obtain an API token by registering at [AbuseIPDB](https://www.abuseipdb.com/).
+You can obtain an API token by registering at [AbuseIPDB](https://www.abuseipdb.com/). The app also works **without** the abuseipddb API, but some information will not be available!
 
 ---
 ### Client configuration
