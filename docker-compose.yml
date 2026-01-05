@@ -6,7 +6,7 @@ services:
       context: ./server
     container_name: ip-server
     env_file:
-      - ./server/.env
+      - ./server/.env.server
     ports:
       - "3000:3000"
     volumes:
@@ -22,7 +22,7 @@ services:
     env_file:
       - ./client/.env
     ports:
-      - "4000:80"
+      - "4000:4000"
     volumes:
       - ./client:/app
       - /app/node_modules
