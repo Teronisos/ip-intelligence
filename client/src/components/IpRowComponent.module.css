@@ -29,7 +29,7 @@
 }
 
 .flag img, .flag svg {
-    width: 24px !important;
+    width: 28px !important;
     height: auto;
     display: block;
     border-radius: 2px;
@@ -101,11 +101,11 @@
 .abuseWarning { background: #f0ad4e; color: #fff; }     
 .abuseSuccess { background: #5cb85c; color: #fff; }   
 
-.pingSuccess { background: rgba(92, 184, 92, 0.15); color: #5cb85c; border: 1px solid rgba(92, 184, 92, 0.4); }
-.pingDanger  { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.4); }
+.pingSuccess { background: rgba(92, 184, 92 ); color: #fff; border: 1px solid rgba(92, 184, 92, 0.4); }
+.pingDanger  { background: rgba(217, 83, 79); color: #fff; border: 1px solid rgba(217, 83, 79, 0.4); }
 
 .blocked { background: #d9534f !important; color: #fff !important; border: none; }
-.clean   { background: rgba(92, 184, 92, 0.2); color: #5cb85c; border: 1px solid rgba(92, 184, 92, 0.4); }
+.clean   { background: rgba(92, 184, 92); color: #fff; border: 1px solid rgba(92, 184, 92, 0.4); }
 .noInfo  { background: #5a5f70; color: #f0f0f0; }
 
 .portGroup {
@@ -132,7 +132,7 @@
 }
 
 .portOpen   { background: #5cb85c; color: #fff; }
-.portClosed { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.4); }
+.portClosed { background: rgba(217, 83, 79); color: #fff; border: 1px solid rgba(217, 83, 79, 0.4); }
 
 .addButton {
     width: 32px;

@@ -51,7 +51,7 @@ const Modal: React.FC<ModalProps> = ({
                                 <span className={styles.key}>Location:</span> 
                                 <span className={styles.value}><Flag code={country} className={styles.flagIcon} /> {country || '—'}</span>
                             </div>
-                            <div className={styles.infoRow}><span className={styles.key}>Abuse Contact:</span> <span className={styles.value}>{abuseMail ? <a href={`mailto:${abuseMail}`}>{abuseMail}</a> : '—'}</span></div>
+                            <div className={styles.infoRow}><span className={styles.key}>Potential Abuse Contact:</span> <span className={styles.value}>{abuseMail ? <a href={`mailto:${abuseMail}`}>{abuseMail}</a> : '—'}</span></div>
                         </div>
                     </div>
 

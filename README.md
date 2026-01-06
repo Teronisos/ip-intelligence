@@ -76,7 +76,7 @@ Set:
 
 ```bash
 PORT=4000
-REACT_APP_API_URL=NODE_SERVER_ENDPOINT
+REACT_APP_API_URL=NODE_SERVER_ENDPOINT # let it empty, if the server runs on the same machine
 ```
 
 Replace `NODE_SERVER_ENDPOINT` with the server’s API endpoint (for example, the host IP or domain of your backend).
@@ -90,6 +90,13 @@ Build and start the entire stack:
 docker-compose build --no-cache
 docker-compose up -d
 ```
+
+---
+
+## Disclaimer
+
+This project may perform network port scans.  
+Port scanning is intended **only for systems you own or have explicit permission to test**; any unauthorized use is prohibited and at the user’s own risk.
 
 ---
 
