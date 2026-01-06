@@ -5,27 +5,20 @@ services:
     build:
       context: ./server
     container_name: ip-server
-    env_file:
-      - ./server/.env.server
     ports:
       - "3000:3000"
     volumes:
       - ./server:/app
       - /app/node_modules
-    command: npm run dev
     restart: unless-stopped
 
   client:
     build:
       context: ./client
     container_name: ip-client
-    env_file:
-      - ./client/.env
     ports:
       - "4000:4000"
     volumes:
       - ./client:/app
       - /app/node_modules
-    depends_on:
-      - server
     restart: unless-stopped
