@@ -26,7 +26,6 @@ exports.handleData = async (req, res) => {
 
 
     const pingResult = await ping(ip);
-    console.log(    `Ping result for ${ip}: ${pingResult}`);
     ipRequestData.pingStatus = pingResult;
     ipRequestData.commonPorts = await checkCommonPorts(ip);
 

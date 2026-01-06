@@ -22,7 +22,6 @@ async function loadBlocklist() {
 
 
 exports.isIpBlocked = async function(ip) {
-    console.log(ip)
     if (!ip) {
         return false;
     }

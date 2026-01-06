@@ -43,7 +43,6 @@ const FetchRIPE = async (ip: string): Promise<EvaluatedIpData> => {
         const data = res.data;
         const abuseEmail = extractAbuseEmail(data);
 
-        console.log(abuseEmail);
 
         const evaluatedData: EvaluatedIpData = {
             ip,

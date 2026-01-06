@@ -58,10 +58,9 @@ const App = () => {
     for (const ip of ips) {
       try {
         const data = await getIPInformations(ip);
-        console.log(data)
         setIpInfos(prev => [...prev, data]);
       } catch (err) {
-        console.error(`Fehler bei IP ${ip}:`, err);
+        console.error(`Error with ${ip}:`, err);
       }
     }
   };

@@ -17,7 +17,7 @@ const FetchBackendAPI = async (ip: string): Promise<EvaluatedIpData> => {
         }))
         : [];
 
-        console.log("Backend API data:", data.countryCode);
+
 
     return {
         ip: data.ip,
