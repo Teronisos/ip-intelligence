@@ -1,4 +1,4 @@
-[![Docker Compose CI](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-compose.yml)
+[![Docker Compose CI Check](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Teronisos/ip-intelligence/actions/workflows/docker-image.yml)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange)
 
 
