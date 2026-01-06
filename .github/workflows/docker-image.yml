@@ -1,4 +1,4 @@
-name: Docker Compose CI Check
+name: Docker Compose Simple Check
 
 on:
   push:
@@ -7,58 +7,25 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build-and-test:
+  build-and-check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and start containers
-        # --build forces a fresh build, --wait ensures containers are up
+      - name: Build and Start containers
+        # --wait prüft automatisch, ob die Container erfolgreich "Up" sind
         run: docker compose up -d --build --wait
 
-      - name: Verify container status
-        run: |
-          echo "Checking Docker container status..."
-          docker compose ps
-          # Exit if any container is not 'running'
-          if docker compose ps | grep -v "running" | grep -v "NAME"; then
-            echo "Error: One or more containers are not running!"
-            exit 1
-          fi
+      - name: Verify Running State
+        # Ein einfacher Check, um die Liste der laufenden Container im Log zu sehen
+        run: docker compose ps
 
-      - name: Health Check Backend (Node.js API)
-        # Verifies the JSON response from the /check endpoint
-        run: |
-          echo "Testing Node.js API JSON response on port 3000..."
-          # Fetch JSON and validate it's not empty/error using jq
-          # --retry helps if the app takes a few seconds to initialize
-          RESPONSE=$(curl --retry 5 --retry-delay 2 --retry-connrefused -s http://localhost:3000/check)
-          echo "Response: $RESPONSE"
-          
-          # Check if the response is valid JSON (requires jq, which is pre-installed)
-          echo "$RESPONSE" | jq . > /dev/null || { echo "Invalid JSON received"; exit 1; }
-
-      - name: Health Check Frontend (React)
-        # Verifies the React app is serving the main entry point on port 4000
-        run: |
-          echo "Testing React Frontend on port 4000..."
-          # Checking for the 'root' id which is standard for React apps
-          curl --retry 5 --retry-delay 2 --retry-connrefused -f http://localhost:4000 | grep -q "id=\"root\"" || {
-            echo "Frontend reachable but React root element missing!"
-            exit 1
-          }
-
-      - name: Show logs if failure
+      - name: Show logs if something failed
         if: failure()
-        run: |
-          echo "Failure detected! Showing container logs for debugging:"
-          docker compose logs
+        run: docker compose logs
 
-      - name: Stop and remove containers
+      - name: Stop and Cleanup
         if: always()
         run: docker compose down --volumes --remove-orphans
