@@ -1,10 +1,10 @@
+/* --- Cisco-Inspired Enterprise Dark Mode --- */
 
 .backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(10, 11, 14, 0.75);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    background: rgba(15, 20, 25, 0.85); /* Etwas dunklerer, neutralerer Backdrop */
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,242 +12,208 @@
 }
 
 .modal {
-    transform: scale(1.1); /* easy fix */
     width: 100%;
-    max-width: 800px;
-    background: linear-gradient(145deg,
-            rgba(40, 42, 54, 0.82) 0%,
-            rgba(30, 32, 40, 0.88) 100%);
-    color: #f8f8f2;
-    border-radius: 8px;
-
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    border: 1px solid rgba(255, 255, 255, 0.12);
-
-    box-shadow:
-        0 25px 70px -10px rgba(0, 0, 0, 0.8),
-        inset 0 1px 1px rgba(255, 255, 255, 0.05);
-
+    max-width: 850px;
+    background: #1a1f26; /* Deep Enterprise Blue-Grey */
+    color: #e1e5ea;
+    border-radius: 4px; /* Weniger rund, eher funktional */
+    border: 1px solid #323c47;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: modalAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: modalAppear 0.2s ease-out;
 }
 
+@keyframes modalAppear {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header: Fokus auf die IP */
 .modalHeader {
-    background: rgba(0, 0, 0, 0.25);
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: #232931;
+    padding: 1.25rem 2rem;
+    border-bottom: 2px solid lightblue; /* Cisco Blue Accent Line */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
-
-
 
 .headerTitle .label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: #9ea4b0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: lightblue;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
 }
 
 .headerTitle h2 {
-    margin: 2px 0;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.5rem;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 4px 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: #ffffff;
 }
 
 .headerTitle .subtext {
-    font-size: 0.9rem;
-    color: #bd93f9;
+    font-size: 0.85rem;
+    color: #8a96a3;
+    font-family: 'Roboto Mono', monospace;
 }
 
 .closeBtn {
     background: none;
     border: none;
-    color: #6272a4;
-    font-size: 2rem;
-    line-height: 1;
+    color: #8a96a3;
+    font-size: 1.5rem;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
-/* ==========================
-   Body / Sections
-========================== */
+.closeBtn:hover {
+    color: #fff;
+}
+
+/* Body & Sections */
 .bodyContainer {
     padding: 2rem;
     overflow-y: auto;
-    max-height: 70vh;
+    max-height: 75vh;
+    background: #1a1f26;
 }
 
 .section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .sectionTitle {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    color: #6272a4;
-    border-left: 3px solid #50fa7b;
-    padding-left: 10px;
-    margin-bottom: 1.2rem;
+    color: #ffffff;
+    border-bottom: 1px solid #323c47;
+    padding-bottom: 8px;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
     letter-spacing: 0.5px;
-    font-weight: 700;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px 40px;
+    gap: 12px 60px;
 }
 
 .infoRow {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #282f38;
 }
 
 .key {
-    color: #9ea4b0;
+    color: #8a96a3;
     font-size: 0.85rem;
-    font-weight: 500;
 }
 
 .value {
-    color: #f8f8f2;
-    font-weight: 500;
+    color: #ffffff;
+    font-weight: 400;
     font-size: 0.9rem;
-    text-align: right;
 }
 
 .value a {
-    color: #ff79c6;
+    color: #ff5555;
     text-decoration: none;
 }
 
+.value a:hover {
+    text-decoration: underline;
+}
 
+/* Status Badges */
 .badge {
-    padding: 2px 10px;
-    border-radius: 2px;
+    padding: 3px 12px;
+    border-radius: 12px; /* Pill-Shape für Status */
     font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .success {
-    background: rgba(80, 250, 123, 0.1);
-    color: #50fa7b;
-    border: 1px solid rgba(80, 250, 123, 0.2);
+    background: rgba(45, 170, 117, 0.15);
+    color: #4cd995;
+    border: 1px solid rgba(45, 170, 117, 0.3);
 }
 
 .error {
-    background: rgba(255, 85, 85, 0.1);
-    color: #ff5555;
-    border: 1px solid rgba(255, 85, 85, 0.2);
+    background: rgba(235, 87, 87, 0.15);
+    color: #ff6b6b;
+    border: 1px solid rgba(235, 87, 87, 0.3);
 }
 
+/* Score Badge (Heat-map) */
 .scoreBadge {
-    font-family: 'Roboto Mono', monospace;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.85rem;
 }
 
-.scoreHigh {
-    color: #ff5555;
-    background: #ff555522;
-}
+.scoreHigh { color: #ff6b6b; background: rgba(235, 87, 87, 0.1); }
+.scoreMed { color: #f2c94c; background: rgba(242, 201, 76, 0.1); }
+.scoreLow { color: #4cd995; background: rgba(76, 175, 80, 0.1); }
 
-.scoreMed {
-    color: #f1fa8c;
-    background: #f1fa8c22;
-}
-
-.scoreLow {
-    color: #50fa7b;
-    background: #50fa7b22;
-}
-
-
+/* Ports Analysis */
 .portContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .portItem {
     display: flex;
     flex-direction: column;
-    width: 80px;
-    text-align: center;
-    border: 1px solid #44475a;
-    border-radius: 4px;
-    font-family: 'Roboto Mono', monospace;
+    width: 70px;
+    background: #232931;
+    border: 1px solid #323c47;
+    border-radius: 3px;
+    transition: all 0.2s;
 }
 
 .portNumber {
-    background: #44475a;
-    padding: 4px;
-    font-size: 0.9rem;
+    background: #2d353e;
+    padding: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #e1e5ea;
 }
 
 .portStatus {
     padding: 4px;
-    font-size: 0.7rem;
-    font-weight: bold;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .portOpen {
     border-color: #50fa7b;
-    color: #50fa7b;
+    background: rgba(6, 122, 180, 0.05);
+}
+
+.portOpen .portStatus {
+    border-color: #50fa7b;
 }
 
 .portClosed {
-    color: #6272a4;
-    opacity: 0.6;
-}
-
-
-
-.primaryBtn,
-.secondaryBtn {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.primaryBtn {
-    background: #50fa7b;
-    color: #282a36;
-    border: none;
-}
-
-.primaryBtn:hover {
-    background: #40c060;
-}
-
-.secondaryBtn {
-    background: transparent;
-    color: #f8f8f2;
-    border: 1px solid #44475a;
-}
-
-.secondaryBtn:hover {
-    background: #44475a;
+    opacity: 0.5;
 }
 
 .flagIcon {
-    width: 30px;
-    vertical-align: middle;
+    width: 22px;
+    height: auto;
     margin-right: 8px;
-    border-radius: 2px;
+    border-radius: 1px;
+    filter: saturate(0.8);
 }

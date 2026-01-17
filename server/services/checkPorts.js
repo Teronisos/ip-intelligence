@@ -35,12 +35,14 @@ exports.checkCommonPorts = async (ip) => {
     const results = await Promise.all([
         checkPort(ip, 80),  // HTTP
         checkPort(ip, 22),  // SSH
-        checkPort(ip, 53)   // DNS
+        checkPort(ip, 53),   // DNS
+        checkPort(ip, 123)   // NTP
     ]);
 
     return {
         port80: results[0],
         port22: results[1],
-        port53: results[2]
+        port53: results[2],
+        port123: results[3],
     };
 };

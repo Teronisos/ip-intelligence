@@ -93,7 +93,7 @@ const IpRow: React.FC<EvaluatedIpData> = ({
                 )}
             </div>
 
-            <div className={styles.portGroup}>
+            {/* <div className={styles.portGroup}>
                 {commonPorts && commonPorts.length > 0 && commonPorts[0].port !== "n/a" ? (
                     commonPorts.map((p) => (
                         <span
@@ -107,6 +107,8 @@ const IpRow: React.FC<EvaluatedIpData> = ({
                     <span style={{ color: '#44475a' }}>—</span>
                 )}
             </div>
+            */}
+            
 
             <div
                 className={styles.addButton}
