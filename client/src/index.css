@@ -1,238 +1,209 @@
-  body {
-    background-color: #282a36;
-    color: #f8f8f2;
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+body {
+  background-color: #282a36;
+  color: #f8f8f2;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
+#screen-warning {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  color: #d32f2f;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#screen-warning::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: -1;
+}
+
+#screen-warning strong {
+  font-size: 48px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#screen-warning span {
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #fff;
+}
+
+@media (max-width: 1200px) {
   #screen-warning {
-    display: none;
+    display: flex;
   }
-
-  @media (max-width: 1200px) {
-
-
-    #screen-warning {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      color: #d32f2f;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-
-    #screen-warning::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      background-color: rgba(255, 255, 255, 0.7);
-      z-index: -1;
-    }
-
-    #screen-warning strong {
-      font-size: 48px;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    #screen-warning span {
-      font-size: 1.1rem;
-      font-weight: normal;
-      color: #fff;
-    }
-
-    body {
-      overflow: hidden;
-    }
-  }
-
-  #screen-warning::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    /* Hier passiert die Magie */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    /* Für Safari Support */
-
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Optionaler heller Schleier */
-    z-index: -1;
-    /* Legt den Blur HINTER den Text der Warnung */
-  }
-
-  /* Verhindert, dass man im Hintergrund scrollt oder klickt */
   body {
     overflow: hidden;
   }
+}
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
 
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
+.ip-list {
+  padding: 25px;
+}
 
-  .ip-list {
-    padding: 25px;
-  }
+header {
+  background-color: #21222c;
+  padding: 1rem;
+  border-bottom: 1px solid #44475a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  header {
-    background-color: #21222c;
-    padding: 1rem;
-    border-bottom: 1px solid #44475a;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.version {
+  font-family: 'Roboto Mono', monospace;
+  background: #282a36;
+  color: #50fa7b;
+}
 
+@media (max-width: 700px) {
   .version {
-    font-family: 'Roboto Mono', monospace;
-    background: #282a36;
-    color: #50fa7b;
+    display: none;
   }
+}
 
-  @media (max-width: 700px) {
-    .version {
-      display: none;
-    }
+.rightHeader h1 {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #f8f8f2;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.highlight-box {
+  background-color: #50fa7b1a;
+  color: #50fa7b;
+  padding: 0.3em 0.8em;
+  border-radius: 0.5rem;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.1em;
+  letter-spacing: 0.03em;
+  border: 1px solid #50fa7b44;
+  box-shadow: inset 0 0 4px #50fa7b33;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.highlight-box:hover {
+  background-color: #50fa7b33;
+  box-shadow: inset 0 0 6px #50fa7b55;
+}
+
+.dashboard {
+  flex: 1;
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.input-card {
+  background-color: #44475a;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  height: 700px;
+}
+
+.output-card {
+  background-color: #44475a;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  min-width: 0;
+  min-height: 700px;
+}
+
+.footer {
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+}
+
+.footer a {
+  color: #4dd0e1;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer a:hover {
+  color: #80deea;
+  text-shadow: 0 0 8px rgba(128, 222, 234, 0.8);
+}
+
+.backend-error-banner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 1rem auto;
+  background-color: #ff555530;
+  border-left: 6px solid #ff5555;
+  color: #ff5555;
+  padding: 1rem 2rem;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
+  animation: slideDown 0.5s ease-out;
+}
+
+.backend-error-banner strong {
+  font-size: 1.05rem;
+}
+
+.backend-error-banner p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
   }
-
-  .rightHeader h1 {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #f8f8f2;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
-
-  .highlight-box {
-    background-color: #50fa7b1a;
-    color: #50fa7b;
-    padding: 0.3em 0.8em;
-    border-radius: 0.5rem;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.1em;
-    letter-spacing: 0.03em;
-    border: 1px solid #50fa7b44;
-    box-shadow: inset 0 0 4px #50fa7b33;
-  }
-
-  .highlight-box:hover {
-    background-color: #50fa7b33;
-    box-shadow: inset 0 0 6px #50fa7b55;
-  }
-
-
-  .dashboard {
-    flex: 1;
-    display: flex;
-    padding: 2rem;
-    gap: 2rem;
-    flex-wrap: wrap;
-
-  }
-
-  .input-card {
-    background-color: #44475a;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 400px;
-    height: 700px;
-  }
-
-  .output-card {
-    background-color: #44475a;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    flex: 1;
-    min-width: 0;
-  }
-
-  .footer {
-    color: #fff;
-    text-align: center;
-    padding: 1rem 0;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 0.9rem;
-
-  }
-
-  .footer a {
-    color: #4dd0e1;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-  }
-
-  .footer a:hover {
-    color: #80deea;
-    text-shadow: 0 0 8px rgba(128, 222, 234, 0.8);
-  }
-
-  .backend-error-banner {
-    width: 100%;
-    max-width: 1200px;
-    margin: 1rem auto;
-    background-color: #ff555530;
-    border-left: 6px solid #ff5555;
-    color: #ff5555;
-    padding: 1rem 2rem;
-    font-family: 'Roboto Mono', monospace;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
-    animation: slideDown 0.5s ease-out;
-  }
-
-  .backend-error-banner strong {
-    font-size: 1.05rem;
-  }
-
-  .backend-error-banner p {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    opacity: 0.9;
-  }
-
-  @keyframes slideDown {
-    0% {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
+}
