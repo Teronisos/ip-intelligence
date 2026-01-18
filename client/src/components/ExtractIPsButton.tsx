@@ -10,7 +10,7 @@ type Props = {
 const ExtractIPsButton: React.FC<Props> = ({ onClick }) => {
   return (
     <button onClick={onClick} className={styles.extractButton}>
-      Extract IPs
+      Extract Data
     </button>
   );
 };

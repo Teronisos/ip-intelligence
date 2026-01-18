@@ -11,3 +11,11 @@
      box-sizing: border-box;
      height: 450px;
  }
+
+ .infoText{
+        display: block;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: #bbbbbb; 
+        margin-left: 5px;
+ }

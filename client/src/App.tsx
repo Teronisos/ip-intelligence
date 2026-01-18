@@ -15,6 +15,7 @@ const App = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ipInfos, setIpInfos] = useState<EvaluatedIpData[]>([]);
   const [backendError, setBackendError] = useState(false);
+  
 
   const getIPInformations = async (ip: string): Promise<EvaluatedIpData> => {
     let backendData: Partial<EvaluatedIpData> = {};
@@ -54,7 +55,11 @@ const App = () => {
     const ips = await extractIPs(value);
 
     setIpInfos([]);
-
+    const maxLookups = 5;
+    if (ips.length >= maxLookups) {
+      alert(`Please enter a maximum of ${maxLookups} IP addresses or hostnames at once.`);
+      return;
+    }
     for (const ip of ips) {
       try {
         const data = await getIPInformations(ip);
@@ -112,7 +117,7 @@ const App = () => {
       <div id="screen-warning">
         <strong>Insufficient Screen Resolution</strong>
         <span>This application is optimized for large displays.<br />
-          Please expand your browser window to at least 1800px.</span>
+          Please expand your browser window to at least 1200px.</span>
       </div>
       <header>
         <span className="version">v2026-01</span>
