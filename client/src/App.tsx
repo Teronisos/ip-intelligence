@@ -55,9 +55,9 @@ const App = () => {
     const ips = await extractIPs(value);
 
     setIpInfos([]);
-    const maxLookups = 5;
+    const maxLookups = 6;
     if (ips.length >= maxLookups) {
-      alert(`Please enter a maximum of ${maxLookups} IP addresses or hostnames at once.`);
+      alert(`Please enter a maximum of ${maxLookups-1} IP addresses or hostnames at once.`);
       return;
     }
     for (const ip of ips) {
@@ -120,7 +120,7 @@ const App = () => {
           Please expand your browser window to at least 1200px.</span>
       </div>
       <header>
-        <span className="version">v2026-01</span>
+        <span className="version">v2026-02</span>
         <div className="rightHeader">
           <h1>
             <span className="highlight-box">IP Intelligence</span> Dashboard

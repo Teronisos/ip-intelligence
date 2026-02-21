@@ -49,22 +49,20 @@ const IpRow: React.FC<EvaluatedIpData> = ({
 
     return (
     <li className={styles.ipItem}>
-        <div className={styles.ipLeft}>
-            <span className={styles.ipAddress}>{ip}</span>
-            <small className={styles.hostname}>{hostname}</small>
-        </div>
-
-        <div className={styles.ipMid}>
-            <div className={styles.flag}>
-                <Flag code={flagSymbol} />
-            </div>
+    {/* Obere Sektion: IP und Metadaten */}
+    <div className={styles.ipHeader}>
+        <span className={styles.ipAddress}>{ip}</span>
+        <div className={styles.ipInfoGroup}>
             <span className={styles.trenner}>•</span>
+            <div className={styles.flag}><Flag code={flagSymbol} /></div>
             <span>{location}</span>
             <span className={styles.trenner}>•</span>
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {org}
-            </span>
+            <span style={{ opacity: 0.8 }}>{org}</span>
         </div>
+    </div>
+
+    {/* Untere Sektion: Hostname startet unter IP */}
+    <small className={styles.hostname}>{hostname}</small>
 
         <div className={styles.ipRight}>
             <span className={`${styles.statusTag} ${abuseClass}`}>

@@ -154,3 +154,75 @@
     height: 18px;
     stroke: #f0f0f0;
 }
+
+
+
+.ipItem {
+    background: rgba(32, 38, 50, 0.85); 
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    display: grid;
+    /* Spalte 1: IP & Hostname Bereich | Spalte 2: Status Tags */
+    grid-template-columns: 1fr auto; 
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.4rem 1.5rem; /* Abstand zwischen Zeilen und Spalten */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    list-style: none;
+}
+
+/* Obere Zeile: IP, Flagge, Location, Org */
+.ipHeader {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.ipAddress {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: greenyellow;
+    white-space: nowrap;
+}
+
+/* Untere Zeile: Hostname darf jetzt lang fließen */
+.hostname {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8rem;
+    color: #a0a8b0; 
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%; /* Begrenzt durch die Breite der ersten Spalte */
+}
+
+/* Die Status-Tags auf der rechten Seite über beide Zeilen zentrieren */
+.ipRight {
+    grid-column: 2;
+    grid-row: 1 / span 2; /* Erstreckt sich über beide Zeilen */
+    display: grid;
+    grid-template-columns: 90px 70px 120px 40px;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.flag img {
+    width: 24px !important;
+    height: auto;
+    vertical-align: middle;
+}
+
+.ipInfoGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #f0f0f0;
+    font-size: 0.9rem;
+}

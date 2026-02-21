@@ -16,6 +16,7 @@ type CommonPorts = {
     abuseMail?: string;
     asn?: string;
     nat?: boolean;
+    domain?: string;
 };
 
 

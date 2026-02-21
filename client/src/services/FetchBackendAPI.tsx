@@ -1,5 +1,5 @@
 import axios from "axios";
-import EvaluatedIpData from "../structs/EvaluatedIpData"; 
+import EvaluatedIpData from "../structs/EvaluatedIpData";
 
 
 
@@ -21,7 +21,8 @@ const FetchBackendAPI = async (ip: string): Promise<EvaluatedIpData> => {
 
     return {
         ip: data.ip,
-        hostname: data.domain || undefined,
+        hostname: data.hostname[0] || undefined,
+        domain: data.domain || undefined,
         abuse: `Abuse: ${data.abuse ?? 0}%`,
         ping: data.pingStatus || false,
         country: data.countryCode || undefined,

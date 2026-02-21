@@ -13,7 +13,7 @@ const InsertBoxComponent: React.FC<Props> = ({ inputRef }) => {
       placeholder="Enter IP address or hostname here..."
       ref={inputRef}
     />
-    <span className={styles.infoText}>Max 5 lookups at once</span>
+    <span className={styles.infoText}>Limit to 5 parallel lookups</span>
     </> 
   );
 };

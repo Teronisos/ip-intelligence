@@ -56,10 +56,10 @@ const abusedDBData = async (msgObj) => {
         const abuseData = await getAbuseData(msgObj.ip);
         msgObj.countryCode = abuseData.data["countryCode"];
         msgObj.domain = abuseData.data["domain"];
+        msgObj.hostname = abuseData.data["hostnames"];
         msgObj.abuse = abuseData.data["abuseConfidenceScore"];
         msgObj.isPublic = abuseData.data["isPublic"];
         msgObj.isp = abuseData.data["isp"];
-
         return msgObj;
     } catch (error) {
         console.error('Error fetching abuse data:', error);
