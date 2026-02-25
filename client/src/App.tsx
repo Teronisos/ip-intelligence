@@ -20,6 +20,7 @@ const App = () => {
   const getIPInformations = async (ip: string): Promise<EvaluatedIpData> => {
     let backendData: Partial<EvaluatedIpData> = {};
     setBackendError(false);
+    
     try {
       backendData = await FetchBackendAPI(ip);
     } catch (error) {

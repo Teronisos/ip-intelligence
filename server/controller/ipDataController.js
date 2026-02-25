@@ -9,7 +9,6 @@ const isIpBlocked = require('../services/blocklistRequest').isIpBlocked
 exports.handleData = async (req, res) => {
     const ip = req.query.q;
 
-
     var ipRequestData = new Message(ip)
 
     if (!checkIP.validateIP(ip)) {

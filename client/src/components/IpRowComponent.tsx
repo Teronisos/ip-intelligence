@@ -46,24 +46,25 @@ const IpRow: React.FC<EvaluatedIpData> = ({
     };
 
 
-
-    return (
+   return (
     <li className={styles.ipItem}>
-    {/* Obere Sektion: IP und Metadaten */}
-    <div className={styles.ipHeader}>
-        <span className={styles.ipAddress}>{ip}</span>
-        <div className={styles.ipInfoGroup}>
-            <span className={styles.trenner}>•</span>
-            <div className={styles.flag}><Flag code={flagSymbol} /></div>
-            <span>{location}</span>
-            <span className={styles.trenner}>•</span>
-            <span style={{ opacity: 0.8 }}>{org}</span>
+        {/* LINKS: IP und Hostname */}
+        <div className={styles.ipLeft}>
+            <span className={styles.ipAddress}>{ip}</span>
+            <small className={styles.hostname} title={hostname}>{hostname}</small>
         </div>
-    </div>
 
-    {/* Untere Sektion: Hostname startet unter IP */}
-    <small className={styles.hostname}>{hostname}</small>
+        {/* MITTE: Location und Org */}
+        <div className={styles.ipMid}>
+            <div className={styles.ipInfoGroup}>
+                <div className={styles.flag}><Flag code={flagSymbol} /></div>
+                <span>{location}</span>
+                <span className={styles.trenner}>•</span>
+                <span className={styles.orgText}>{org}</span>
+            </div>
+        </div>
 
+        {/* RECHTS: Status Tags und Button */}
         <div className={styles.ipRight}>
             <span className={`${styles.statusTag} ${abuseClass}`}>
                 {abuse !== "n/a" ? (abuse.includes('%') ? abuse : `${abuse}%`) : "n/a"}
@@ -75,54 +76,30 @@ const IpRow: React.FC<EvaluatedIpData> = ({
 
             <div className={styles.blocklistWrapper}>
                 {inBlocklist === true ? (
-                    <a
-                        href={`https://lists.blocklist.de/lists/all.txt#:~:text=${ip}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span className={`${styles.statusTag} ${styles.blocked}`}>in blocklist</span>
+                    <a href={`https://lists.blocklist.de/lists/all.txt#:~:text=${ip}`} target="_blank" rel="noopener noreferrer">
+                        <span className={`${styles.statusTag} ${styles.blocked}`}>Blocked</span>
                     </a>
-                ) : inBlocklist === false ? (
-                    <span className={`${styles.statusTag} ${styles.clean}`}>clean</span>
                 ) : (
-                    <span className={`${styles.statusTag} ${styles.noInfo}`}>
-                        {inBlocklist === "n/a" ? "n/a" : "❔ No Info"}
+                    <span className={`${styles.statusTag} ${inBlocklist === false ? styles.clean : styles.noInfo}`}>
+                        {inBlocklist === false ? "Clean" : (inBlocklist === "n/a" ? "n/a" : "❔ No Info")}
                     </span>
                 )}
             </div>
-
-            {/* <div className={styles.portGroup}>
-                {commonPorts && commonPorts.length > 0 && commonPorts[0].port !== "n/a" ? (
-                    commonPorts.map((p) => (
-                        <span
-                            key={p.port}
-                            className={`${styles.portOpen} ${!p.open ? styles.portClosed : ""}`}
-                        >
-                            {p.port}
-                        </span>
-                    ))
-                ) : (
-                    <span style={{ color: '#44475a' }}>—</span>
-                )}
-            </div>
-            */}
-            
 
             <div
                 className={styles.addButton}
                 role="button"
                 tabIndex={0}
-                aria-label={`Open details for ${ip}`}
                 onClick={openModal}
                 onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openModal(e)}
             >
-                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                     <path d="M12 5v14M5 12h14" />
                 </svg>
             </div>
         </div>
 
-
+        {/* Modal-Logik bleibt gleich */}
         {showModalIp && (
             <Modal
                 ip={showModalIp}
