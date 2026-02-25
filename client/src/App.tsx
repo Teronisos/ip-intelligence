@@ -15,12 +15,12 @@ const App = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ipInfos, setIpInfos] = useState<EvaluatedIpData[]>([]);
   const [backendError, setBackendError] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
 
   const getIPInformations = async (ip: string): Promise<EvaluatedIpData> => {
     let backendData: Partial<EvaluatedIpData> = {};
     setBackendError(false);
-    
+
     try {
       backendData = await FetchBackendAPI(ip);
     } catch (error) {
@@ -54,13 +54,14 @@ const App = () => {
   const handleClick = async () => {
     const value = textareaRef.current?.value ?? "";
     const ips = await extractIPs(value);
-
     setIpInfos([]);
     const maxLookups = 6;
     if (ips.length >= maxLookups) {
-      alert(`Please enter a maximum of ${maxLookups-1} IP addresses or hostnames at once.`);
+      alert(`Please enter a maximum of ${maxLookups - 1} IP addresses or hostnames at once.`);
       return;
     }
+    setIsLoading(true);
+    setIpInfos([]);
     for (const ip of ips) {
       try {
         const data = await getIPInformations(ip);
@@ -69,6 +70,8 @@ const App = () => {
         console.error(`Error with ${ip}:`, err);
       }
     }
+    setIsLoading(false);
+
   };
 
 
@@ -114,70 +117,72 @@ const App = () => {
 
 
   return (
-    <>
-      <div id="screen-warning">
-        <strong>Insufficient Screen Resolution</strong>
-        <span>This application is optimized for large displays.<br />
-          Please expand your browser window to at least 1200px.</span>
+  <>
+    <div id="screen-warning">
+      <strong>Insufficient Screen Resolution</strong>
+      <span>
+        This application is optimized for large displays.<br />
+        Please expand your browser window to at least 1200px.
+      </span>
+    </div>
+
+    <div className={`top-loading-bar ${isLoading ? 'active' : ''}`}></div>
+
+    <header>
+      <span className="version">v2026-02</span>
+      <div className="rightHeader">
+        <h1>
+          <span className="highlight-box">IP Intelligence</span> Dashboard
+        </h1>
       </div>
-      <header>
-        <span className="version">v2026-02</span>
-        <div className="rightHeader">
-          <h1>
-            <span className="highlight-box">IP Intelligence</span> Dashboard
-          </h1>
-        </div>
-      </header>
+    </header>
 
-      {backendError && (
-        <div className="backend-error-banner">
-          <strong>⚠️ Backend could not be reached!</strong>
-          <p>
-            Some data as abuse score, ping and port check might be missing as the backend API could not be reached.
+    {backendError && (
+      <div className="backend-error-banner">
+        <strong>⚠️ Backend could not be reached!</strong>
+        <p>
+          Some data as abuse score, ping and port check might be missing...
+        </p>
+      </div>
+    )}
 
-          </p>
-        </div>
-      )}
+    <div className="dashboard">
+      <div className="input-card">
+        <InsertBoxComponent inputRef={textareaRef} />
+        <ExtractIPsButton onClick={handleClick} loading={isLoading} />
+      </div>
 
-      <div className="dashboard">
-        <div className="input-card">
-          <InsertBoxComponent inputRef={textareaRef} />
-          <ExtractIPsButton onClick={handleClick} />
+      <div className="output-card">
+        <div className="progress-container">
+          {isLoading && <div className="progress-bar-indeterminated"></div>}
         </div>
 
-        <div className="output-card">
+        {ipInfos.length > 0 ? (
           <ul className="ip-list">
             {ipInfos.map((info, index) => (
-              <IpRow
-                key={index}
-                ip={info.ip}
-                hostname={info.hostname}
-                country={info.country}
-                org={info.org}
-                company={info.company}
-                asn={info.asn}
-                abuse={info.abuse}
-                abuseMail={info.abuseMail}
-                ping={info.ping}
-                commonPorts={info.commonPorts}
-                inBlocklist={info.inBlocklist}
-                nat={info.nat}
-              />
+              <IpRow key={index} {...info} />
             ))}
           </ul>
-        </div>
+        ) : (
+          !isLoading && (
+            <div className="empty-state">
+              
+            </div>
+          )
+        )}
       </div>
+    </div>
 
-      <footer className="footer">
-        <p>
-          🚀 Get Code on&nbsp;
-          <a href="https://github.com/Teronisos/ip-intelligence" target="_blank">
-            GitHub
-          </a>
-        </p>
-      </footer>
-    </>
-  );
+    <footer className="footer">
+      <p>
+        🚀 Get Code on&nbsp;
+        <a href="https://github.com/Teronisos/ip-intelligence" target="_blank" rel="noreferrer">
+          GitHub
+        </a>
+      </p>
+    </footer>
+  </>
+);
 };
 export default App;
 
